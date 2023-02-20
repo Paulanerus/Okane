@@ -15,7 +15,7 @@ namespace Okane
 
     struct MonthEntry
     {
-        uint32_t month;
+        std::string monthNr;
         std::vector<SimpleEntry> entries;
 
         void operator<<(const SimpleEntry &entry)
@@ -31,7 +31,7 @@ namespace Okane
 
     struct YearEntry
     {
-        uint32_t year;
+        std::string yearNr;
         std::vector<MonthEntry> months;
 
         bool isMonthPresent(uint32_t month)
