@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace OTime
+namespace Okane
 {
     int64_t getCurrentEpoch()
     {
