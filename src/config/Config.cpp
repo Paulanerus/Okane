@@ -56,16 +56,18 @@ void Config::load()
 std::string Config::getDirectory()
 {
 #ifdef _WIN32
-    // TODO
-    return std::getenv("HOMEDRIVE") + std::string(std::getenv("HOMEPATH"));
+    std::string osPath(std::getenv("APPDATA"));
 #endif
 
 #ifdef __unix__
-    return std::getenv("HOME") + std::string("/.config/Okane");
+    std::string osPath(std::getenv("HOME"));
+    osPath += "/.config";
 #endif
 
 #ifdef __APPLE__
     // TODO
-    return std::getenv("HOME");
+    std::string osPath(std::getenv("HOME"));
 #endif
+
+    return osPath + "/Okane";
 }
