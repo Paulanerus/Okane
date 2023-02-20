@@ -34,10 +34,10 @@ namespace Okane
         std::string yearNr;
         std::vector<MonthEntry> months;
 
-        bool isMonthPresent(uint32_t month)
+        bool isMonthPresent(std::string month)
         {
             return std::any_of(months.begin(), months.end(), [month](const auto &m)
-                               { return m.month == month; });
+                               { return m.monthNr == month; });
         }
 
         void operator<<(const MonthEntry &month)
