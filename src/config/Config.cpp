@@ -29,6 +29,13 @@ Config::~Config()
 
 void Config::save()
 {
+    namespace fs = std::filesystem;
+
+    if (!fs::exists(baseDir))
+    {
+        fs::create_directories(baseDir);
+    }
+
     std::fstream configFile;
 
     configFile.open(configPath, std::ios::out);
