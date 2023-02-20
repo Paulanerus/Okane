@@ -3,10 +3,12 @@
 #include "rang.hpp"
 
 #include "AppConfig.hpp"
+#include "../entry/Entry.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <regex>
 
 class Config
 {
