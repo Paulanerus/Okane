@@ -7,12 +7,12 @@
 
 namespace Okane
 {
-    int64_t getCurrentEpoch()
+    inline int64_t getCurrentEpoch()
     {
         return std::time(nullptr);
     }
 
-    tm *tmFromEpoch(const int64_t epoch)
+    inline tm *tmFromEpoch(const int64_t epoch)
     {
         return std::localtime(&epoch);
     }
