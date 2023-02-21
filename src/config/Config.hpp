@@ -26,7 +26,13 @@ private:
 
     std::string getDirectory();
 
-    void save();
+    void loadFile();
 
-    void load();
+    void saveFile();
+
+    void loadEntries();
+
+    void saveEntries();
+
+    void checkAndCreateDir();
 };

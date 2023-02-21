@@ -2,44 +2,60 @@
 
 AppConfig Config::appConfig;
 
+namespace fs = std::filesystem;
+
 Config::Config()
 {
-    namespace fs = std::filesystem;
-
     baseDir = getDirectory();
     configPath = baseDir + "/okane.txt";
 
-    if (!fs::exists(baseDir))
-        fs::create_directories(baseDir);
+    checkAndCreateDir();
 
-    if (!fs::exists(configPath) || fs::is_empty(configPath))
-        return;
-
-    load();
+    loadFile();
+    loadEntries();
 }
 
 Config::~Config()
 {
-    save();
+    checkAndCreateDir();
+
+    saveFile();
+    saveEntries();
 }
 
-void Config::save()
+void Config::checkAndCreateDir()
 {
-    namespace fs = std::filesystem;
-
     if (!fs::exists(baseDir))
         fs::create_directories(baseDir);
+}
 
-    std::ofstream configFile;
+void Config::loadFile()
+{
+    if (!fs::exists(configPath) || fs::is_empty(configPath))
+        return;
 
+    std::ifstream configFile;
     configFile.open(configPath);
 
-    if (configFile.is_open())
-    {
-        configFile << appConfig.currency;
-        configFile.close();
-    }
+    if (!configFile.is_open())
+        return;
 
+    configFile >> appConfig.currency;
+}
+
+void Config::saveFile()
+{
+    std::ofstream configFile;
+    configFile.open(configPath);
+
+    if (!configFile.is_open())
+        return;
+
+    configFile << appConfig.currency;
+}
+
+void Config::saveEntries()
+{
     for (const auto &year : appConfig.years)
     {
         auto yearDir = baseDir + "/" + year.yearNr;
@@ -57,29 +73,12 @@ void Config::save()
 
             for (const auto &entry : month.entries)
                 monthFile << entry.epoch << ';' << entry.tag << ';' << entry.amount << '\n';
-
-            monthFile.close();
         }
     }
 }
 
-void Config::load()
+void Config::loadEntries()
 {
-    namespace fs = std::filesystem;
-
-    std::ifstream configFile;
-    configFile.open(configPath);
-
-    if (configFile.is_open())
-    {
-        configFile >> appConfig.currency;
-
-        configFile.close();
-    }
-
-    if (!fs::exists(baseDir))
-        return;
-
     fs::directory_iterator baseDirIter(baseDir);
 
     for (const auto &entry : baseDirIter)
@@ -118,8 +117,6 @@ void Config::load()
             }
 
             year << month;
-
-            monthFile.close();
         }
 
         appConfig.years.push_back(year);
