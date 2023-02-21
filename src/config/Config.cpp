@@ -30,14 +30,36 @@ void Config::save()
     if (!fs::exists(baseDir))
         fs::create_directories(baseDir);
 
-    std::fstream configFile;
+    std::ofstream configFile;
 
-    configFile.open(configPath, std::ios::out);
+    configFile.open(configPath);
 
     if (configFile.is_open())
     {
         configFile << appConfig.currency;
         configFile.close();
+    }
+
+    for (const auto &year : appConfig.years)
+    {
+        auto yearDir = baseDir + "/" + year.yearNr;
+
+        if (!fs::exists(yearDir))
+            fs::create_directory(yearDir);
+
+        for (const auto &month : year.months)
+        {
+            std::ofstream monthFile;
+            monthFile.open(yearDir + "/" + month.monthNr + ".csv");
+
+            if (!monthFile.is_open())
+                continue;
+
+            for (const auto &entry : month.entries)
+                monthFile << entry.epoch << ';' << entry.tag << ';' << entry.amount << '\n';
+
+            monthFile.close();
+        }
     }
 }
 
@@ -45,8 +67,8 @@ void Config::load()
 {
     namespace fs = std::filesystem;
 
-    std::fstream configFile;
-    configFile.open(configPath, std::ios::in);
+    std::ifstream configFile;
+    configFile.open(configPath);
 
     if (configFile.is_open())
     {
