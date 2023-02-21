@@ -5,6 +5,7 @@
 #include "AppConfig.hpp"
 #include "../entry/Entry.hpp"
 
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
