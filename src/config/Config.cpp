@@ -105,7 +105,7 @@ void Config::loadEntries()
             if (!monthFile.is_open())
                 continue;
 
-            Okane::MonthEntry month{monthEntryName.substr(0, monthEntryName.size() - 4)};
+            Okane::MonthEntry monthEntry{monthEntryName.substr(0, monthEntryName.size() - 4)};
 
             std::string line;
             while (std::getline(monthFile, line))
@@ -113,10 +113,10 @@ void Config::loadEntries()
                 if (!Okane::matchesFile(line))
                     continue;
 
-                month << Okane::SimpleEntry::fromString(line);
+                monthEntry << Okane::SimpleEntry::fromString(line);
             }
 
-            year << month;
+            year << monthEntry;
         }
 
         appConfig.years.push_back(year);
