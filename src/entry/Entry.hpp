@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <sstream>
 #include <string>
 
 namespace Okane

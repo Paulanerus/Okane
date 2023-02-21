@@ -64,7 +64,7 @@ void Config::load()
     {
         auto entryName = entry.path().filename().string();
 
-        if (!entry.is_directory() || !Okane::matchesYear(entryName))
+        if (!entry.is_directory() || !std::regex_match(entryName, Okane::YEAR_REGEX))
             continue;
 
         Okane::YearEntry year{entryName};
@@ -75,7 +75,7 @@ void Config::load()
         {
             auto monthEntryName = month.path().filename().string();
 
-            if (!month.is_regular_file() || !Okane::matchesMonth(monthEntryName))
+            if (!month.is_regular_file() || !std::regex_match(monthEntryName, Okane::MONTH_REGEX))
                 continue;
 
             std::ifstream monthFile;
@@ -89,7 +89,7 @@ void Config::load()
             std::string line;
             while (std::getline(monthFile, line))
             {
-                if (!Okane::matchesFile(line))
+                if (!std::regex_match(line, Okane::FILE_REGEX))
                     continue;
 
                 month << Okane::SimpleEntry::fromString(line);

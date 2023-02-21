@@ -11,6 +11,7 @@ namespace Okane
 
     const std::regex FILE_REGEX{"^[-+]?\\d+;[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+$"};
 
+    /*
     bool matchesYear(const std::string &toMatch)
     {
         return std::regex_match(toMatch, YEAR_REGEX);
@@ -25,4 +26,5 @@ namespace Okane
     {
         return std::regex_match(toMatch, FILE_REGEX);
     }
+    */
 }
