@@ -11,6 +11,21 @@ namespace Okane
         int64_t epoch;
         std::string tag;
         double amount;
+
+        static SimpleEntry fromString(std::string &line)
+        {
+            std::vector<std::string> parts;
+
+            std::stringstream stream(line);
+            std::string tmp;
+
+            while (std::getline(stream, tmp, ';'))
+            {
+                parts.push_back(tmp);
+            }
+
+            return {std::stol(parts[0]), parts[1], std::stod(parts[2])};
+        }
     };
 
     struct MonthEntry
