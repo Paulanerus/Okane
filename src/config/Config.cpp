@@ -10,14 +10,10 @@ Config::Config()
     configPath = baseDir + "/okane.txt";
 
     if (!fs::exists(baseDir))
-    {
         fs::create_directories(baseDir);
-    }
 
     if (!fs::exists(configPath) || fs::is_empty(configPath))
-    {
         return;
-    }
 
     load();
 }
@@ -32,9 +28,7 @@ void Config::save()
     namespace fs = std::filesystem;
 
     if (!fs::exists(baseDir))
-    {
         fs::create_directories(baseDir);
-    }
 
     std::fstream configFile;
 
@@ -62,9 +56,7 @@ void Config::load()
     }
 
     if (!fs::exists(baseDir))
-    {
         return;
-    }
 
     fs::directory_iterator baseDirIter(baseDir);
 

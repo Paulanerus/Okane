@@ -42,9 +42,7 @@ std::vector<std::string> Option::copyAfter(int argc, char **args)
     std::vector<std::string> argsLeft;
 
     for (int i = 2; i < argc; i++)
-    {
         argsLeft.emplace_back(args[i]);
-    }
 
     return argsLeft;
 }

@@ -4,9 +4,7 @@
 int main(int argc, char **args)
 {
     if (argc <= 1)
-    {
         return EXIT_SUCCESS;
-    }
 
     rang::setControlMode(rang::control::Force);
 

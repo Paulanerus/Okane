@@ -20,9 +20,7 @@ namespace Okane
             std::string tmp;
 
             while (std::getline(stream, tmp, ';'))
-            {
                 parts.push_back(tmp);
-            }
 
             return {std::stol(parts[0]), parts[1], std::stod(parts[2])};
         }
