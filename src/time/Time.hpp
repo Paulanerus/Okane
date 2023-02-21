@@ -17,11 +17,21 @@ namespace Okane
         return std::localtime(&epoch);
     }
 
-    std::string toString(const tm *localTime)
+    inline tm *getCurrentTime()
+    {
+        return tmFromEpoch(getCurrentEpoch());
+    }
+
+    std::string toStringFMT(const tm *localTime, const std::string &fmt)
     {
         std::stringstream stream;
-        stream << std::put_time(localTime, "%d.%m.%Y");
+        stream << std::put_time(localTime, fmt.c_str());
 
         return stream.str();
+    }
+
+    inline std::string toString(const tm *localTime)
+    {
+        return toStringFMT(localTime, "%d.%m.%Y");
     }
 }
