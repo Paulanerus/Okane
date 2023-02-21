@@ -27,21 +27,6 @@ Config::~Config()
     save();
 }
 
-std::vector<std::string> split(std::string &str)
-{
-    std::vector<std::string> parts;
-
-    std::stringstream stream(str);
-    std::string tmp;
-
-    while (std::getline(stream, tmp, ';'))
-    {
-        parts.push_back(tmp);
-    }
-
-    return parts;
-}
-
 void Config::save()
 {
     namespace fs = std::filesystem;
@@ -87,10 +72,8 @@ void Config::load()
     {
         auto entryName = entry.path().filename().string();
 
-        if (!entry.is_directory() || !std::regex_match(entryName, std::regex("[0-9]+")))
-        {
+        if (!entry.is_directory() || !Okane::matchesYear(entryName))
             continue;
-        }
 
         Okane::YearEntry year{entryName};
 
@@ -100,39 +83,29 @@ void Config::load()
         {
             auto monthEntryName = month.path().filename().string();
 
-            if (!month.is_regular_file() || !std::regex_match(monthEntryName, std::regex("([1-9]|1[0-2]).csv")))
-            {
+            if (!month.is_regular_file() || !Okane::matchesMonth(monthEntryName))
                 continue;
-            }
 
-            std::fstream monthFile;
-            monthFile.open(baseDir + "/" + entryName + "/" + monthEntryName, std::ios::in);
+            std::ifstream monthFile;
+            monthFile.open(baseDir + "/" + entryName + "/" + monthEntryName);
 
-            if (monthFile.is_open())
+            if (!monthFile.is_open())
+                continue;
+
+            Okane::MonthEntry month{monthEntryName.substr(0, monthEntryName.size() - 4)};
+
+            std::string line;
+            while (std::getline(monthFile, line))
             {
-                Okane::MonthEntry month{monthEntryName.substr(0, monthEntryName.size() - 4)};
+                if (!Okane::matchesFile(line))
+                    continue;
 
-                std::string line;
-                while (std::getline(monthFile, line))
-                {
-                    if (!std::regex_match(line, std::regex("^[-+]?\\d+;[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+$")))
-                    {
-                        continue;
-                    }
-
-                    auto parts = split(line);
-
-                    auto epoch = std::stol(parts[0]);
-                    auto amount = std::stod(parts[2]);
-
-                    Okane::SimpleEntry entry{epoch, parts[1], amount};
-                    month << entry;
-                }
-
-                year << month;
-
-                monthFile.close();
+                month << Okane::SimpleEntry::fromString(line);
             }
+
+            year << month;
+
+            monthFile.close();
         }
 
         appConfig.years.push_back(year);

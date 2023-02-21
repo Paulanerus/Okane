@@ -4,12 +4,12 @@
 
 #include "AppConfig.hpp"
 #include "../entry/Entry.hpp"
+#include "../regex/RegexHelper.hpp"
 
 #include <sstream>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include <regex>
 
 class Config
 {
