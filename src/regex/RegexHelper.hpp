@@ -11,20 +11,18 @@ namespace Okane
 
     const std::regex FILE_REGEX{"^[-+]?\\d+;[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+$"};
 
-    /*
-    bool matchesYear(const std::string &toMatch)
+    inline bool matchesYear(const std::string &toMatch)
     {
         return std::regex_match(toMatch, YEAR_REGEX);
     }
-
-    bool matchesMonth(const std::string &toMatch)
+    
+    inline bool matchesMonth(const std::string &toMatch)
     {
         return std::regex_match(toMatch, MONTH_REGEX);
     }
 
-    bool matchesFile(const std::string &toMatch)
+    inline bool matchesFile(const std::string &toMatch)
     {
         return std::regex_match(toMatch, FILE_REGEX);
     }
-    */
 }
