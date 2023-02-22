@@ -7,6 +7,8 @@
 
 namespace Okane
 {
+    const std::string DATE_FORMAT{"%d.%m.%Y"};
+
     inline int64_t getCurrentEpoch()
     {
         return std::time(nullptr);
@@ -22,7 +24,7 @@ namespace Okane
         return tmFromEpoch(getCurrentEpoch());
     }
 
-    std::string toStringFMT(const tm *localTime, const std::string &fmt)
+    inline std::string toStringFMT(const tm *localTime, const std::string &fmt)
     {
         std::stringstream stream;
         stream << std::put_time(localTime, fmt.c_str());
@@ -32,6 +34,6 @@ namespace Okane
 
     inline std::string toString(const tm *localTime)
     {
-        return toStringFMT(localTime, "%d.%m.%Y");
+        return toStringFMT(localTime, DATE_FORMAT);
     }
 }
