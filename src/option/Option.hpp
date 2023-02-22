@@ -1,12 +1,8 @@
 #pragma once
 
-#include "rang.hpp"
-
 #include <vector>
 #include <string>
 #include <memory>
-#include <algorithm>
-#include <iostream>
 
 class Option
 {

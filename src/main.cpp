@@ -1,5 +1,10 @@
+#include "rang.hpp"
+
 #include "config/Config.hpp"
 #include "option/Option.hpp"
+#include "time/Time.hpp"
+
+#include <iostream>
 
 int main(int argc, char **args)
 {

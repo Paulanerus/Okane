@@ -1,5 +1,7 @@
 #include "Option.hpp"
 
+#include <algorithm>
+
 #include "impl/HelpOption.hpp"
 #include "impl/DetailedOption.hpp"
 #include "impl/StatusOption.hpp"

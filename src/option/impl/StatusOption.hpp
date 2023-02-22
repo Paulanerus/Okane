@@ -1,6 +1,11 @@
 #pragma once
 
+#include "rang.hpp"
+
 #include "../Option.hpp"
+#include "../../time/Time.hpp"
+
+#include <iostream>
 
 class StatusOption : public Option
 {

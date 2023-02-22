@@ -1,14 +1,6 @@
 #pragma once
 
-#include "rang.hpp"
-
 #include "AppConfig.hpp"
-#include "../entry/Entry.hpp"
-#include "../regex/RegexHelper.hpp"
-
-#include <iostream>
-#include <fstream>
-#include <filesystem>
 
 class Config
 {

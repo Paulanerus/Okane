@@ -1,7 +1,11 @@
 #pragma once
 
+#include "rang.hpp"
+
 #include "../Option.hpp"
 #include "../../config/Config.hpp"
+
+#include <iostream>
 
 class CurrencyOption : public Option
 {

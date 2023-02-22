@@ -2,6 +2,8 @@
 
 #include "../Option.hpp"
 
+#include <iostream>
+
 class HelpOption : public Option
 {
 

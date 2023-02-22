@@ -1,5 +1,13 @@
 #include "Config.hpp"
 
+#include "rang.hpp"
+
+#include "../regex/RegexHelper.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <filesystem>
+
 AppConfig Config::appConfig;
 
 namespace fs = std::filesystem;
