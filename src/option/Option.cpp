@@ -8,35 +8,18 @@
 #include "impl/AddOption.hpp"
 #include "impl/CurrencyOption.hpp"
 
-const std::vector<std::string> Option::args = {"help", "detailed", "status", "add", "currency"};
+const std::unordered_map<std::string, std::shared_ptr<Option>> Option::args = {
+    {"help", std::make_shared<HelpOption>()},
+    {"detailed", std::make_shared<DetailedOption>()},
+    {"status", std::make_shared<StatusOption>()},
+    {"add", std::make_shared<AddOption>()},
+    {"currency", std::make_shared<CurrencyOption>()}};
 
-std::unique_ptr<Option> Option::find(const std::string &arg)
+std::shared_ptr<Option> Option::find(const std::string &arg)
 {
-    if (std::find(args.begin(), args.end(), arg) == args.end())
-    {
-        return nullptr;
-    }
+    auto iter = args.find(arg);
 
-    if (arg == "help")
-    {
-        return std::make_unique<HelpOption>();
-    }
-    else if (arg == "detailed")
-    {
-        return std::make_unique<DetailedOption>();
-    }
-    else if (arg == "status")
-    {
-        return std::make_unique<StatusOption>();
-    }
-    else if (arg == "add")
-    {
-        return std::make_unique<AddOption>();
-    }
-    else
-    {
-        return std::make_unique<CurrencyOption>();
-    }
+    return iter == args.end() ? nullptr : iter->second;
 }
 
 std::vector<std::string> Option::copyAfter(int argc, char **args)
