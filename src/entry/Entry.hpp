@@ -23,6 +23,12 @@ namespace Okane
         void operator<<(const SimpleEntry &entry);
 
         SimpleEntry operator[](size_t entry) const;
+
+        double getIncome();
+
+        double getExpenses();
+
+        double getBalance();
     };
 
     struct YearEntry
@@ -35,5 +41,5 @@ namespace Okane
         MonthEntry operator[](size_t month) const;
     };
 
-    std::optional<MonthEntry> getMonth(const std::string& month, const std::string& year);
+    std::optional<MonthEntry> getMonth(const std::string &month, const std::string &year);
 }

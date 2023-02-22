@@ -3,6 +3,7 @@
 #include "../config/Config.hpp"
 
 #include <iostream>
+#include <algorithm>
 #include <sstream>
 
 Okane::SimpleEntry Okane::SimpleEntry::fromString(std::string &line)
@@ -26,6 +27,39 @@ void Okane::MonthEntry::operator<<(const Okane::SimpleEntry &entry)
 Okane::SimpleEntry Okane::MonthEntry::operator[](size_t entry) const
 {
     return entries.at(entry);
+}
+
+double Okane::MonthEntry::getIncome()
+{
+    std::vector<Okane::SimpleEntry> positive;
+    std::copy_if(entries.begin(), entries.end(), std::back_inserter(positive), [](const SimpleEntry &e)
+                 { return e.amount > 0; });
+
+    double totalIncome = 0;
+
+    for (const auto &entry : positive)
+        totalIncome += entry.amount;
+
+    return totalIncome;
+}
+
+double Okane::MonthEntry::getExpenses()
+{
+    std::vector<Okane::SimpleEntry> negative;
+    std::copy_if(entries.begin(), entries.end(), std::back_inserter(negative), [](const SimpleEntry &e)
+                 { return e.amount < 0; });
+
+    double totalExpenses = 0;
+
+    for (const auto &entry : negative)
+        totalExpenses += entry.amount;
+
+    return totalExpenses;
+}
+
+double Okane::MonthEntry::getBalance()
+{
+    return getIncome() + getExpenses();
 }
 
 void Okane::YearEntry::operator<<(const Okane::MonthEntry &month)
