@@ -37,3 +37,22 @@ Okane::MonthEntry Okane::YearEntry::operator[](size_t month) const
 {
     return months.at(month);
 }
+
+std::optional<Okane::MonthEntry> Okane::getMonth(const std::string &month, const std::string &year)
+{
+    auto yearIter = std::find_if(Config::appConfig.years.begin(), Config::appConfig.years.end(), [year](const Okane::YearEntry &y)
+                                 { return y.yearNr == year; });
+
+    if (yearIter == Config::appConfig.years.end())
+        return {};
+
+    auto yearEntry = *yearIter;
+
+    auto monthIter = std::find_if(yearEntry.months.begin(), yearEntry.months.end(), [month](const Okane::MonthEntry &m)
+                                  { return m.monthNr == month; });
+
+    if (monthIter == yearEntry.months.end())
+        return {};
+
+    return *monthIter;
+}

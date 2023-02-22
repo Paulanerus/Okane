@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <optional>
 
 namespace Okane
 {
@@ -33,4 +34,6 @@ namespace Okane
 
         MonthEntry operator[](size_t month) const;
     };
+
+    std::optional<MonthEntry> getMonth(const std::string& month, const std::string& year);
 }
