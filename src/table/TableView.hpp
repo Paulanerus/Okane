@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iomanip>
+#include <numeric>
 
 class TableView
 {
@@ -13,7 +15,8 @@ public:
 
     void print()
     {
-        fillRowsToSameSize();
+        for (auto &row : m_Rows)
+            row.resize(m_MaxRowSize, " ");
 
         collectColumnLongest();
 
@@ -29,7 +32,7 @@ public:
             {
                 auto entry = m_Rows[i][j];
 
-                std::cout << entry << fillPadding(getPadding(entry, j));
+                std::cout << entry << std::setw(getPadding(entry, j));
 
                 if (j != m_MaxRowLength - 1)
                     std::cout << ' ' << m_Border << ' ';
@@ -60,26 +63,7 @@ private:
 
     inline size_t getPadding(const std::string &entry, size_t columnIndex)
     {
-        return m_LongestOfEachRow[columnIndex] - entry.length();
-    }
-
-    std::string fillPadding(size_t size)
-    {
-        std::string padding;
-
-        for (size_t i = 0; i < size; i++)
-            padding += " ";
-
-        return padding;
-    }
-
-    void fillRowsToSameSize()
-    {
-        for (auto &row : m_Rows)
-        {
-            while (row.size() < m_MaxRowSize)
-                row.push_back(" ");
-        }
+        return (m_LongestOfEachRow[columnIndex] - entry.length()) + 1;
     }
 
     void collectColumnLongest()
@@ -97,20 +81,13 @@ private:
         }
     }
 
-    void setMaxRowLength()
+    inline void setMaxRowLength()
     {
-        m_MaxRowLength = 3 * m_MaxRowSize - 1;
-
-        for (const auto &size : m_LongestOfEachRow)
-            m_MaxRowLength += size;
+        m_MaxRowLength = 3 * m_MaxRowSize - 1 + std::accumulate(m_LongestOfEachRow.begin(), m_LongestOfEachRow.end(), 0);
     }
 
-    void printRowLine()
+    inline void printRowLine()
     {
-        std::cout << m_Corner;
-        for (size_t i = 0; i < m_MaxRowLength; i++)
-            std::cout << m_Row;
-
-        std::cout << m_Corner << '\n';
+        std::cout << m_Corner << std::string(m_MaxRowLength, m_Row) << m_Corner << std::endl;
     }
 };
