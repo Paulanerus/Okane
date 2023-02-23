@@ -5,12 +5,21 @@
 #include <iostream>
 #include <iomanip>
 #include <numeric>
+#include <sstream>
 
 class TableView
 {
 public:
     TableView(char row = '-', char border = '|', char corner = '+') : m_Row(row), m_Border(border), m_Corner(corner)
     {
+    }
+
+    template <typename T>
+    static std::string to_string(T const &value)
+    {
+        std::stringstream stream;
+        stream << value;
+        return stream.str();
     }
 
     void print()
@@ -50,6 +59,13 @@ public:
             m_MaxRowSize = row.size();
 
         m_Rows.push_back(row);
+    }
+
+    void operator<<(const std::string &row)
+    {
+        m_MaxRowSize = 1;
+
+        m_Rows.push_back(std::vector<std::string>{row});
     }
 
 private:
