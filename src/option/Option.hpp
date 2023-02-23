@@ -17,5 +17,5 @@ public:
     virtual void execute(const std::vector<std::string> &args) = 0;
 
 private:
-    static const std::unordered_map<std::string, std::shared_ptr<Option>> args;
+    static const std::unordered_map<std::string, std::shared_ptr<Option>> m_Args;
 };

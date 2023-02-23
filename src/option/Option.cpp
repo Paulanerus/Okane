@@ -8,7 +8,7 @@
 #include "impl/AddOption.hpp"
 #include "impl/CurrencyOption.hpp"
 
-const std::unordered_map<std::string, std::shared_ptr<Option>> Option::args = {
+const std::unordered_map<std::string, std::shared_ptr<Option>> Option::m_Args = {
     {"help", std::make_shared<HelpOption>()},
     {"detailed", std::make_shared<DetailedOption>()},
     {"status", std::make_shared<StatusOption>()},
@@ -17,9 +17,9 @@ const std::unordered_map<std::string, std::shared_ptr<Option>> Option::args = {
 
 std::shared_ptr<Option> Option::find(const std::string &arg)
 {
-    auto iter = args.find(arg);
+    auto iter = m_Args.find(arg);
 
-    return iter == args.end() ? nullptr : iter->second;
+    return iter == m_Args.end() ? nullptr : iter->second;
 }
 
 std::vector<std::string> Option::copyAfter(int argc, char **args)
