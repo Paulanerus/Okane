@@ -27,7 +27,9 @@ int main(int argc, char **args)
     }
 
     std::vector<std::string> restOfArgs = Option::copyAfter(argc, args);
+    std::cout << std::endl;
     option->execute(restOfArgs);
+    std::cout << std::endl;
 
     return EXIT_SUCCESS;
 }
