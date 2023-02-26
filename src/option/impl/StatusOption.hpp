@@ -50,6 +50,8 @@ public:
                 std::cout << "Please provide a valid Year (2022 or 2023)" << std::endl;
                 return;
             }
+
+            year = yearArg;
         }
 
         const auto monthEntry = Okane::getMonth(month, year);
