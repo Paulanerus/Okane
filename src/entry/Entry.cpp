@@ -16,7 +16,7 @@ Okane::SimpleEntry Okane::SimpleEntry::fromString(std::string &line)
     while (std::getline(stream, tmp, ';'))
         parts.push_back(tmp);
 
-    return {std::stol(parts[0]), parts[1], std::stod(parts[2])};
+    return {parts[0], parts[1], std::stod(parts[2])};
 }
 
 void Okane::MonthEntry::operator<<(const Okane::SimpleEntry &entry)

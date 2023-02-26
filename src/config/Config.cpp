@@ -80,7 +80,7 @@ void Config::saveEntries()
                 continue;
 
             for (const auto &entry : month.entries)
-                monthFile << entry.epoch << ';' << entry.tag << ';' << entry.amount << '\n';
+                monthFile << entry.date << ';' << entry.tag << ';' << entry.amount << '\n';
         }
     }
 }

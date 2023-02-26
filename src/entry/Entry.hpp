@@ -8,7 +8,7 @@ namespace Okane
 {
     struct SimpleEntry
     {
-        int64_t epoch;
+        std::string date;
         std::string tag;
         double amount;
 
