@@ -118,7 +118,7 @@ void Config::loadEntries()
             std::string line;
             while (std::getline(monthFile, line))
             {
-                if (!Okane::matchesFile(line))
+                if (!Okane::matchesEntry(line))
                     continue;
 
                 monthEntry << Okane::SimpleEntry::fromString(line);
