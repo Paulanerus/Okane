@@ -7,7 +7,7 @@ namespace Okane
 {
     const std::regex YEAR_REGEX{"[0-9]+"};
 
-    const std::regex MONTH_REGEX{"([1-9]|1[0-2]).csv"};
+    const std::regex MONTH_REGEX{"(0[1-9]|1[0-2]).csv"};
 
     const std::regex FILE_REGEX{"^[-+]?\\d+;[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+$"};
 
