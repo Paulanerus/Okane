@@ -12,14 +12,14 @@
 
 int main(int argc, char **args)
 {
+    if (argc <= 1)
+        return EXIT_SUCCESS;
+
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
 #endif
 
     rang::setControlMode(rang::control::Force);
-
-    if (argc <= 1)
-        return EXIT_SUCCESS;
 
     auto config = std::make_unique<Config>();
 
