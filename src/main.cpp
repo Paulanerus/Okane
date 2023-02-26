@@ -18,6 +18,9 @@ int main(int argc, char **args)
 
     rang::setControlMode(rang::control::Force);
 
+    if (argc <= 1)
+        return EXIT_SUCCESS;
+
     auto config = std::make_unique<Config>();
 
     std::string firstArg{args[1]};
