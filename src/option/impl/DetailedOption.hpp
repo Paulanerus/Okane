@@ -63,10 +63,10 @@ public:
         auto monthValue = monthEntry.value();
 
         TableView tableView;
-        tableView << std::vector<std::string>{"Date", "Tag", "Amount"};
+        tableView << std::vector<std::string>{"Index", "Date", "Tag", "Amount"};
 
-        for (const auto &entry : monthValue.entries)
-            tableView << std::vector<std::string>{entry.date, entry.tag, TableView::to_string(entry.amount)};
+        for (size_t i = 0; i < monthValue.entries.size(); i++)
+            tableView << std::vector<std::string>{TableView::to_string(i), monthValue.entries[i].date, monthValue.entries[i].tag, TableView::to_string(monthValue.entries[i].amount)};
 
         tableView.print();
     }
