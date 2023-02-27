@@ -41,5 +41,7 @@ namespace Okane
         MonthEntry operator[](size_t month) const;
     };
 
+    std::optional<YearEntry> getYear(const std::string &year);
+    
     std::optional<MonthEntry> getMonth(const std::string &month, const std::string &year);
 }

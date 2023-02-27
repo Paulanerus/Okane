@@ -16,7 +16,7 @@ private:
         {"status", "<month> <year> -> Prints the income, expenses and balance of the provided month and year"},
         {"detailed", "<month> <year> -> Prints a table with every entry from the provided month and year"},
         {"currency", "<currency> -> Changes the currency"},
-        {"add", "<amount> <tag> <month> <year> -> Adds a specified amount and tag to a provided month and year"},
+        {"add", "<amount> <tag> <date> -> Adds a specified amount and tag to a provided month and year"},
     };
 
 public:
@@ -27,7 +27,7 @@ public:
         for (const auto &[option, info] : options)
             std::cout << '\t' << rang::fgB::blue << option << rang::style::reset << ' ' << info << '\n';
 
-        std::cout << rang::fgB::yellow << "\nTip: <month> and <year> are always optional arguments and will be replaced with the current month and year.\n"
+        std::cout << rang::fgB::yellow << "\nTip: <date>, <month> and <year> are always optional arguments and will be replaced with the current corresponding value.\n"
                   << rang::style::reset;
     }
 };
