@@ -42,7 +42,7 @@ public:
         amount = std::stod(args.at(0));
         tag = args.at(1);
 
-        if (args.size() == 3)
+        if (args.size() > 2)
         {
             if (!Okane::matchesDate(args.at(2)))
             {
