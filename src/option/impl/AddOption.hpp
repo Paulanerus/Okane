@@ -101,6 +101,6 @@ public:
 
         Config::appConfig.years.push_back(yearEntry);
 
-        std::cout << (day + "." + month + "." + year);
+        std::cout << "Successfully added Entry for " << day << '.' << month << '.' << year;
     }
 };
