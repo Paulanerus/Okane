@@ -6,6 +6,8 @@
 
 # Build
 
+Currently only Windows(vs build tools) and GNU/Linux (GNU Make) are supported 
+
 I'm using [premake5](https://premake.github.io/) to generate my project/make files
 
 **For GNU Make:**
