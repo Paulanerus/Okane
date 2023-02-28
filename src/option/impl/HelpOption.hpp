@@ -17,6 +17,7 @@ private:
         {"detailed", "<month> <year> -> Prints a table with every entry from the provided month and year"},
         {"currency", "<currency> -> Changes the currency"},
         {"add", "<amount> <tag> <date> -> Adds a specified amount and tag to a provided month and year"},
+        {"remove", "<index> <month> <year> -> Removes a specified entry from a provided index, month and year"},
     };
 
 public:

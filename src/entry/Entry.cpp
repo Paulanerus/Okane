@@ -22,6 +22,18 @@ void MonthEntry::add(const shared_simple &entry)
     entries.push_back(entry);
 }
 
+bool MonthEntry::erase(const size_t index)
+{
+    if (index >= entries.size())
+    {
+        return false;
+    }
+
+    entries.erase(entries.begin() + index);
+
+    return true;
+}
+
 double MonthEntry::getIncome()
 {
     double totalIncome{};

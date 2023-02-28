@@ -19,6 +19,8 @@ namespace Okane
 
     const std::regex DAY_REGEX{"^(0?[1-9]|[1-2][0-9]|3[0-1])$"};
 
+    const std::regex INDEX_REGEX{"^[0-9]+$"};
+
     inline bool matchesYear(const std::string &toMatch)
     {
         return std::regex_match(toMatch, YEAR_REGEX);
@@ -52,5 +54,10 @@ namespace Okane
     inline bool matchesDay(const std::string &toMatch)
     {
         return std::regex_match(toMatch, DAY_REGEX);
+    }
+
+    inline bool matchesIndex(const std::string &toMatch)
+    {
+        return std::regex_match(toMatch, INDEX_REGEX);
     }
 }

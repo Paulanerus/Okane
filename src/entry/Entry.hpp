@@ -26,6 +26,8 @@ struct MonthEntry
 
     void add(const shared_simple &entry);
 
+    bool erase(const size_t index);
+
     double getIncome();
 
     double getExpenses();
