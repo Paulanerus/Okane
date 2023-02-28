@@ -2,11 +2,9 @@
 
 #include "../config/Config.hpp"
 
-#include <iostream>
-#include <algorithm>
 #include <sstream>
 
-Okane::SimpleEntry Okane::SimpleEntry::fromString(std::string &line)
+shared_simple SimpleEntry::fromString(std::string &line)
 {
     std::vector<std::string> parts;
 
@@ -16,87 +14,88 @@ Okane::SimpleEntry Okane::SimpleEntry::fromString(std::string &line)
     while (std::getline(stream, tmp, ';'))
         parts.push_back(tmp);
 
-    return {parts[0], parts[1], std::stod(parts[2])};
+    return Entry::make_simple(parts[0], parts[1], std::stod(parts[2]));
 }
 
-void Okane::MonthEntry::operator<<(const Okane::SimpleEntry &entry)
+void MonthEntry::add(const shared_simple &entry)
 {
     entries.push_back(entry);
 }
 
-Okane::SimpleEntry Okane::MonthEntry::operator[](size_t entry) const
+double MonthEntry::getIncome()
 {
-    return entries.at(entry);
-}
+    double totalIncome{};
 
-double Okane::MonthEntry::getIncome()
-{
-    std::vector<Okane::SimpleEntry> positive;
-    std::copy_if(entries.begin(), entries.end(), std::back_inserter(positive), [](const SimpleEntry &e)
-                 { return e.amount > 0; });
-
-    double totalIncome = 0;
-
-    for (const auto &entry : positive)
-        totalIncome += entry.amount;
+    for (const auto &entry : entries)
+    {
+        if (entry->amount > 0)
+            totalIncome += entry->amount;
+    }
 
     return totalIncome;
 }
 
-double Okane::MonthEntry::getExpenses()
+double MonthEntry::getExpenses()
 {
-    std::vector<Okane::SimpleEntry> negative;
-    std::copy_if(entries.begin(), entries.end(), std::back_inserter(negative), [](const SimpleEntry &e)
-                 { return e.amount < 0; });
+    double totalExpenses{};
 
-    double totalExpenses = 0;
-
-    for (const auto &entry : negative)
-        totalExpenses += entry.amount;
+    for (const auto &entry : entries)
+    {
+        if (entry->amount < 0)
+            totalExpenses += entry->amount;
+    }
 
     return totalExpenses;
 }
 
-double Okane::MonthEntry::getBalance()
+double MonthEntry::getBalance()
 {
     return getIncome() + getExpenses();
 }
 
-void Okane::YearEntry::operator<<(const Okane::MonthEntry &month)
+void YearEntry::add(const shared_month &month)
 {
     months.push_back(month);
 }
 
-Okane::MonthEntry Okane::YearEntry::operator[](size_t month) const
+shared_simple Entry::make_simple(std::string date, std::string tag, double amount)
 {
-    return months.at(month);
+    return std::make_shared<SimpleEntry>(date, tag, amount);
 }
 
-std::optional<Okane::YearEntry> Okane::getYear(const std::string &year)
+shared_month Entry::make_month(std::string monthNr)
 {
-    auto yearIter = std::find_if(Config::appConfig.years.begin(), Config::appConfig.years.end(), [year](const Okane::YearEntry &y)
-                                 { return y.yearNr == year; });
-
-    if (yearIter == Config::appConfig.years.end())
-        return {};
-
-    return *yearIter;
+    return std::make_shared<MonthEntry>(monthNr);
 }
 
-std::optional<Okane::MonthEntry> Okane::getMonth(const std::string &month, const std::string &year)
+shared_year Entry::make_year(std::string yearNr)
 {
-    auto yearEntry = Okane::getYear(year);
+    return std::make_shared<YearEntry>(yearNr);
+}
 
-    if (!yearEntry.has_value())
-        return {};
+shared_year Entry::getYear(const std::string &year)
+{
+    for (const auto &yearEntry : Config::appConfig.years)
+    {
+        if (yearEntry->yearNr == year)
+            return {yearEntry};
+    }
 
-    auto yearValue = yearEntry.value();
+    return nullptr;
+}
 
-    auto monthIter = std::find_if(yearValue.months.begin(), yearValue.months.end(), [month](const Okane::MonthEntry &m)
-                                  { return m.monthNr == month; });
+shared_month Entry::getMonth(const std::string &month, const std::string &year)
+{
+    auto yearEntry = getYear(year);
 
-    if (monthIter == yearValue.months.end())
-        return {};
+    if (!yearEntry)
+        return nullptr;
 
-    return *monthIter;
+    for (const auto &monthEntry : yearEntry->months)
+    {
+        if (monthEntry->monthNr == month)
+            return {monthEntry};
+    }
+
+    return nullptr;
 }

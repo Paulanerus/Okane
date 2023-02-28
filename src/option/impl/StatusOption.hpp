@@ -54,22 +54,20 @@ public:
             year = yearArg;
         }
 
-        const auto monthEntry = Okane::getMonth(month, year);
+        const auto monthEntry = Entry::getMonth(month, year);
 
-        if (!monthEntry.has_value())
+        if (!monthEntry)
         {
             std::cout << "You don't have any entry for " << month << '.' << year << std::endl;
             return;
         }
 
-        auto monthValue = monthEntry.value();
-
         TableView tableView;
 
         tableView << "Balance";
-        tableView << TableView::to_string(monthValue.getIncome());
-        tableView << TableView::to_string(monthValue.getExpenses());
-        tableView << TableView::to_string(monthValue.getBalance());
+        tableView << TableView::to_string(monthEntry->getIncome());
+        tableView << TableView::to_string(monthEntry->getExpenses());
+        tableView << TableView::to_string(monthEntry->getBalance());
 
         tableView.print();
     }

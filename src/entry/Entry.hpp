@@ -2,46 +2,60 @@
 
 #include <vector>
 #include <string>
-#include <optional>
+#include <memory>
 
-namespace Okane
+struct SimpleEntry
 {
-    struct SimpleEntry
-    {
-        std::string date;
-        std::string tag;
-        double amount;
+    std::string date;
+    std::string tag;
+    double amount;
 
-        static SimpleEntry fromString(std::string &line);
-    };
+    SimpleEntry(std::string date, std::string tag, double amount) : date(date), tag(tag), amount(amount) {}
 
-    struct MonthEntry
-    {
-        std::string monthNr;
-        std::vector<SimpleEntry> entries;
+    static std::shared_ptr<SimpleEntry> fromString(std::string &line);
+};
 
-        void operator<<(const SimpleEntry &entry);
+typedef std::shared_ptr<SimpleEntry> shared_simple;
 
-        SimpleEntry operator[](size_t entry) const;
+struct MonthEntry
+{
+    std::string monthNr;
+    std::vector<shared_simple> entries;
 
-        double getIncome();
+    MonthEntry(std::string monthNr) : monthNr(monthNr) {}
 
-        double getExpenses();
+    void add(const shared_simple &entry);
 
-        double getBalance();
-    };
+    double getIncome();
 
-    struct YearEntry
-    {
-        std::string yearNr;
-        std::vector<MonthEntry> months;
+    double getExpenses();
 
-        void operator<<(const MonthEntry &month);
+    double getBalance();
+};
 
-        MonthEntry operator[](size_t month) const;
-    };
+typedef std::shared_ptr<MonthEntry> shared_month;
 
-    std::optional<YearEntry> getYear(const std::string &year);
-    
-    std::optional<MonthEntry> getMonth(const std::string &month, const std::string &year);
+struct YearEntry
+{
+    std::string yearNr;
+    std::vector<shared_month> months;
+
+    YearEntry(std::string yearNr) : yearNr(yearNr) {}
+
+    void add(const shared_month &month);
+};
+
+typedef std::shared_ptr<YearEntry> shared_year;
+
+namespace Entry
+{
+    shared_simple make_simple(std::string date, std::string tag, double amount);
+
+    shared_month make_month(std::string monthNr);
+
+    shared_year make_year(std::string yearNr);
+
+    shared_year getYear(const std::string &year);
+
+    shared_month getMonth(const std::string &month, const std::string &year);
 }

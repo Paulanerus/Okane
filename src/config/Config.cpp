@@ -66,21 +66,21 @@ void Config::saveEntries()
 {
     for (const auto &year : appConfig.years)
     {
-        auto yearDir = baseDir + "/" + year.yearNr;
+        auto yearDir = baseDir + "/" + year->yearNr;
 
         if (!fs::exists(yearDir))
             fs::create_directory(yearDir);
 
-        for (const auto &month : year.months)
+        for (const auto &month : year->months)
         {
             std::ofstream monthFile;
-            monthFile.open(yearDir + "/" + month.monthNr + ".csv");
+            monthFile.open(yearDir + "/" + month->monthNr + ".csv");
 
             if (!monthFile.is_open())
                 continue;
 
-            for (const auto &entry : month.entries)
-                monthFile << entry.date << ';' << entry.tag << ';' << entry.amount << '\n';
+            for (const auto &entry : month->entries)
+                monthFile << entry->date << ';' << entry->tag << ';' << entry->amount << '\n';
         }
     }
 }
@@ -96,7 +96,7 @@ void Config::loadEntries()
         if (!entry.is_directory() || !Okane::matchesYear(entryName))
             continue;
 
-        Okane::YearEntry year{entryName};
+        auto year = Entry::make_year(entryName);
 
         fs::directory_iterator yearIter(baseDir + "/" + entryName);
 
@@ -113,7 +113,7 @@ void Config::loadEntries()
             if (!monthFile.is_open())
                 continue;
 
-            Okane::MonthEntry monthEntry{monthEntryName.substr(0, monthEntryName.size() - 4)};
+            auto monthEntry = Entry::make_month(monthEntryName.substr(0, monthEntryName.size() - 4));
 
             std::string line;
             while (std::getline(monthFile, line))
@@ -121,10 +121,10 @@ void Config::loadEntries()
                 if (!Okane::matchesEntry(line))
                     continue;
 
-                monthEntry << Okane::SimpleEntry::fromString(line);
+                monthEntry->add(SimpleEntry::fromString(line));
             }
 
-            year << monthEntry;
+            year->add(monthEntry);
         }
 
         appConfig.years.push_back(year);

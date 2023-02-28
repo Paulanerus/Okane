@@ -90,16 +90,25 @@ public:
 
             year = yearArg;
         }
+        auto yearEntry = Entry::getYear(year);
 
-        auto monthEntry = Okane::getMonth(month, year).value_or(Okane::MonthEntry{month});
+        if (!yearEntry)
+        {
+            std::cout << "Year does not exist!" << std::endl;
+            yearEntry = Entry::make_year(year);
+            Config::appConfig.years.push_back(yearEntry);
+        }
 
-        monthEntry << Okane::SimpleEntry{(day + "." + month + "." + year), tag, amount};
+        auto monthEntry = Entry::getMonth(month, year);
 
-        auto yearEntry = Okane::getYear(year).value_or(Okane::YearEntry{year});
+        if (!monthEntry)
+        {
+            std::cout << "Month does not exist!" << std::endl;
+            monthEntry = Entry::make_month(month);
+            yearEntry->add(monthEntry);
+        }
 
-        yearEntry << monthEntry;
-
-        Config::appConfig.years.push_back(yearEntry);
+        monthEntry->add(Entry::make_simple((day + "." + month + "." + year), tag, amount));
 
         std::cout << "Successfully added Entry for " << day << '.' << month << '.' << year;
     }
