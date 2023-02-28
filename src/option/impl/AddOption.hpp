@@ -94,7 +94,6 @@ public:
 
         if (!yearEntry)
         {
-            std::cout << "Year does not exist!" << std::endl;
             yearEntry = Entry::make_year(year);
             Config::appConfig.years.push_back(yearEntry);
         }
@@ -103,7 +102,6 @@ public:
 
         if (!monthEntry)
         {
-            std::cout << "Month does not exist!" << std::endl;
             monthEntry = Entry::make_month(month);
             yearEntry->add(monthEntry);
         }
