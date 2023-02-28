@@ -60,6 +60,9 @@ public:
             return;
         }
 
+        std::sort(monthEntry->entries.begin(), monthEntry->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
+                  { return e1->date < e2->date; });
+
         TableView tableView;
         tableView << std::vector<std::string>{"Index", "Date", "Tag", "Amount"};
 
