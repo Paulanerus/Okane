@@ -11,7 +11,7 @@ namespace Okane
 
     const std::regex ENTRY_REGEX{"\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+$"};
 
-    const std::regex AMOUNT_REGEX{"[-+]?\\d*\\.?\\d+$"};
+    const std::regex AMOUNT_REGEX{"[-+]?\\d*\\.?\\d{0,2}$"};
 
     const std::regex TAG_REGEX{"[a-zA-Z0-9]+$"};
 

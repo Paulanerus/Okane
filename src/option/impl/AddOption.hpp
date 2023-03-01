@@ -29,7 +29,7 @@ public:
 
         if (!Okane::matchesAmount(args.at(0)))
         {
-            std::cout << "Please enter a valid amount number (-6.6)";
+            std::cout << "Please enter a valid amount number (100, -6.6 or 12.35)";
             return;
         }
 

@@ -13,7 +13,7 @@ public:
     static std::string to_string(T const &value)
     {
         std::stringstream stream;
-        stream << value;
+        stream << std::fixed << std::setprecision(2) << value;
         return stream.str();
     }
 
