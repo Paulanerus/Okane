@@ -5,6 +5,7 @@
 #include "../../entry/Entry.hpp"
 #include "../../table/TableView.hpp"
 #include "../../regex/RegexHelper.hpp"
+#include "../../config/Config.hpp"
 
 #include <iostream>
 
@@ -67,7 +68,7 @@ public:
         tableView << std::vector<std::string>{"Index", "Date", "Tag", "Amount"};
 
         for (size_t i = 0; i < monthEntry->entries.size(); i++)
-            tableView << std::vector<std::string>{TableView::to_string(i), monthEntry->entries[i]->date, monthEntry->entries[i]->tag, TableView::to_string(monthEntry->entries[i]->amount)};
+            tableView << std::vector<std::string>{TableView::to_string(i), monthEntry->entries[i]->date, monthEntry->entries[i]->tag, TableView::to_string(monthEntry->entries[i]->amount) + " " + Config::appConfig.currency};
 
         tableView.print();
     }

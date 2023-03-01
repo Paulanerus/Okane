@@ -7,6 +7,7 @@
 #include "../../entry/Entry.hpp"
 #include "../../table/TableView.hpp"
 #include "../../regex/RegexHelper.hpp"
+#include "../../config/Config.hpp"
 
 #include <iostream>
 
@@ -65,9 +66,9 @@ public:
         TableView tableView;
 
         tableView << "Balance";
-        tableView << TableView::to_string(monthEntry->getIncome());
-        tableView << TableView::to_string(monthEntry->getExpenses());
-        tableView << TableView::to_string(monthEntry->getBalance());
+        tableView << TableView::to_string(monthEntry->getIncome()) + " " + Config::appConfig.currency;
+        tableView << TableView::to_string(monthEntry->getExpenses()) + " " + Config::appConfig.currency;
+        tableView << TableView::to_string(monthEntry->getBalance()) + " " + Config::appConfig.currency;
 
         tableView.print();
     }
