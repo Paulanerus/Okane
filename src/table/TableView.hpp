@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iomanip>
 
 class TableView
 {
@@ -31,6 +32,8 @@ private:
     std::vector<std::vector<std::string>> m_Rows;
 
     std::vector<size_t> m_LongestOfEachRow;
+
+    inline size_t getWidth(const std::string &str);
 
     inline size_t getPadding(const std::string &entry, size_t columnIndex);
 

@@ -12,7 +12,7 @@ int main(int argc, char **args)
     if (argc <= 1)
         return EXIT_SUCCESS;
 
-    setlocale(LC_CTYPE, "");
+    setlocale(LC_CTYPE, "en_US.utf8");
 
     rang::setControlMode(rang::control::Force);
 

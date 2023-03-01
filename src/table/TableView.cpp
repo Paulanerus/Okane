@@ -1,7 +1,6 @@
 #include "TableView.hpp"
 
 #include <iostream>
-#include <iomanip>
 #include <numeric>
 
 TableView::TableView(char row, char border, char corner) : m_Row(row), m_Border(border), m_Corner(corner)
@@ -54,9 +53,19 @@ void TableView::operator<<(const std::string &row)
     m_Rows.push_back(std::vector<std::string>{row});
 }
 
+inline size_t TableView::getWidth(const std::string &str)
+{
+    size_t width{};
+
+    for (size_t i = 0; i < str.length(); i += std::mblen(&str[i], str.length() - i))
+        width++;
+
+    return width;
+}
+
 inline size_t TableView::getPadding(const std::string &entry, size_t columnIndex)
 {
-    return (m_LongestOfEachRow[columnIndex] - entry.length()) + 1;
+    return (m_LongestOfEachRow[columnIndex] - getWidth(entry)) + 1;
 }
 
 void TableView::collectColumnLongest()
