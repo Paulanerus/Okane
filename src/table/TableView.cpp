@@ -76,7 +76,10 @@ void TableView::collectColumnLongest()
 
 inline void TableView::setMaxRowLength()
 {
-    m_MaxRowLength = 3 * m_MaxRowSize - 1 + static_cast<size_t>(std::accumulate(m_LongestOfEachRow.begin(), m_LongestOfEachRow.end(), 0));
+    m_MaxRowLength = 3 * m_MaxRowSize - 1;
+
+    for (const auto &row : m_LongestOfEachRow)
+        m_MaxRowLength += row;
 }
 
 inline void TableView::printRowLine()
