@@ -26,6 +26,11 @@ namespace Okane
         {"12", {"December", "Dec", "12", "12"}},
     };
 
+    inline bool isLeapYear(long year)
+    {
+        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+    }
+
     inline std::optional<std::string> getMonthFromId(const std::string &id)
     {
         for (const auto &[month, ids] : MONTH_MAP)

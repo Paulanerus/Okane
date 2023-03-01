@@ -90,6 +90,13 @@ public:
 
             year = yearArg;
         }
+
+        if (day == "29" && month == "02" && !Okane::isLeapYear(std::stol(year)))
+        {
+            std::cout << "You've entered " << day << '.' << month << '.' << year << " Which is not a valid year (not a leap year)";
+            return;
+        }
+
         auto yearEntry = Entry::getYear(year);
 
         if (!yearEntry)
