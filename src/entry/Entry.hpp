@@ -4,15 +4,25 @@
 #include <string>
 #include <memory>
 
-struct SimpleEntry
+class SimpleEntry
 {
-    std::string date;
-    std::string tag;
-    double amount;
-
-    SimpleEntry(std::string date, std::string tag, double amount) : date(date), tag(tag), amount(amount) {}
+public:
+    SimpleEntry(std::string date, std::string tag, double amount) : m_Date(date), m_Tag(tag), m_Amount(amount) {}
 
     static std::shared_ptr<SimpleEntry> fromString(std::string &line);
+
+    std::string getDate() const;
+
+    std::string getTag() const;
+
+    double getAmount() const;
+
+private:
+    std::string m_Date;
+
+    std::string m_Tag;
+
+    double m_Amount;
 };
 
 typedef std::shared_ptr<SimpleEntry> shared_simple;

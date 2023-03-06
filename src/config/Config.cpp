@@ -80,7 +80,7 @@ void Config::saveEntries()
                 continue;
 
             for (const auto &entry : month->entries)
-                monthFile << entry->date << ';' << entry->tag << ';' << std::fixed << std::setprecision(2) << entry->amount << '\n';
+                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << std::fixed << std::setprecision(2) << entry->getAmount() << '\n';
         }
     }
 }

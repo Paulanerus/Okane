@@ -62,13 +62,13 @@ public:
         }
 
         std::sort(monthEntry->entries.begin(), monthEntry->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
-                  { return e1->date < e2->date; });
+                  { return e1->getDate() < e2->getDate(); });
 
         TableView tableView;
         tableView.addRow({"Index", "Date", "Tag", "Amount"});
 
         for (size_t i = 0; i < monthEntry->entries.size(); i++)
-            tableView.addRow({TableView::to_string(i), monthEntry->entries[i]->date, monthEntry->entries[i]->tag, TableView::to_string(monthEntry->entries[i]->amount) + " " + Config::appConfig.currency});
+            tableView.addRow({TableView::to_string(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), TableView::to_string(monthEntry->entries[i]->getAmount()) + " " + Config::appConfig.currency});
 
         tableView.print();
     }

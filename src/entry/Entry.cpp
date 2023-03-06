@@ -4,6 +4,21 @@
 
 #include <sstream>
 
+std::string SimpleEntry::getDate() const
+{
+    return m_Date;
+}
+
+std::string SimpleEntry::getTag() const
+{
+    return m_Tag;
+}
+
+double SimpleEntry::getAmount() const
+{
+    return m_Amount;
+}
+
 shared_simple SimpleEntry::fromString(std::string &line)
 {
     std::vector<std::string> parts;
@@ -40,8 +55,8 @@ double MonthEntry::getIncome()
 
     for (const auto &entry : entries)
     {
-        if (entry->amount > 0)
-            totalIncome += entry->amount;
+        if (entry->getAmount() > 0)
+            totalIncome += entry->getAmount();
     }
 
     return totalIncome;
@@ -53,8 +68,8 @@ double MonthEntry::getExpenses()
 
     for (const auto &entry : entries)
     {
-        if (entry->amount < 0)
-            totalExpenses += entry->amount;
+        if (entry->getAmount() < 0)
+            totalExpenses += entry->getAmount();
     }
 
     return totalExpenses;
