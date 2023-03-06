@@ -8,5 +8,5 @@
 struct AppConfig
 {
     std::string currency = "€";
-    std::vector<std::shared_ptr<YearEntry>> years;
+    std::vector<shared_year> years;
 };

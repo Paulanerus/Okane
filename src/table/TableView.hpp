@@ -20,7 +20,7 @@ public:
 
     void print();
 
-    void operator<<(const std::vector<std::string> &row);
+    void addRow(const std::vector<std::string> &row);
 
     void operator<<(const std::string &row);
 

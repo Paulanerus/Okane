@@ -38,7 +38,7 @@ void TableView::print()
     printRowLine();
 }
 
-void TableView::operator<<(const std::vector<std::string> &row)
+void TableView::addRow(const std::vector<std::string> &row)
 {
     if (row.size() > m_MaxRowSize)
         m_MaxRowSize = row.size();
@@ -48,9 +48,7 @@ void TableView::operator<<(const std::vector<std::string> &row)
 
 void TableView::operator<<(const std::string &row)
 {
-    m_MaxRowSize = 1;
-
-    m_Rows.push_back(std::vector<std::string>{row});
+    addRow({row});
 }
 
 inline size_t TableView::getWidth(const std::string &str)
