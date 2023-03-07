@@ -92,7 +92,7 @@ namespace Entry
 
     shared_simple make_simple(std::string date, std::string tag, double amount);
 
-    shared_abo make_abo(std::string date, std::string tag, double amount);
+    shared_abo make_abo(std::string date, std::string tag, double amount, PayInterval interval);
 
     shared_month make_month(std::string monthNr);
 

@@ -105,9 +105,9 @@ shared_simple Entry::make_simple(std::string date, std::string tag, double amoun
     return std::make_shared<SimpleEntry>(date, tag, amount);
 }
 
-shared_abo Entry::make_abo(std::string date, std::string tag, double amount)
+shared_abo Entry::make_abo(std::string date, std::string tag, double amount, PayInterval interval)
 {
-    return std::make_shared<AboEntry>(date, tag, amount);
+    return std::make_shared<AboEntry>(date, tag, amount, interval);
 }
 
 shared_month Entry::make_month(std::string monthNr)
