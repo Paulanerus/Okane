@@ -1,15 +1,25 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 #include <memory>
+
+enum EntryType
+{
+    SIMPLE,
+    ABO,
+};
+
+enum PayInterval
+{
+    MONTHLY,
+    YEARLY,
+};
 
 class SimpleEntry
 {
 public:
     SimpleEntry(std::string date, std::string tag, double amount) : m_Date(date), m_Tag(tag), m_Amount(amount) {}
-
-    static std::shared_ptr<SimpleEntry> fromString(std::string &line);
 
     std::string getDate() const;
 
@@ -17,7 +27,9 @@ public:
 
     double getAmount() const;
 
-private:
+    virtual EntryType getType() const;
+
+protected:
     std::string m_Date;
 
     std::string m_Tag;
@@ -26,6 +38,21 @@ private:
 };
 
 typedef std::shared_ptr<SimpleEntry> shared_simple;
+
+class AboEntry : public SimpleEntry
+{
+public:
+    AboEntry(std::string date, std::string tag, double amount, PayInterval interval) : SimpleEntry(date, tag, amount), m_Interval(interval) {}
+
+    EntryType getType() const override;
+
+    PayInterval getInterval() const;
+
+private:
+    PayInterval m_Interval;
+};
+
+typedef std::shared_ptr<AboEntry> shared_abo;
 
 struct MonthEntry
 {
@@ -61,7 +88,11 @@ typedef std::shared_ptr<YearEntry> shared_year;
 
 namespace Entry
 {
+    shared_simple fromString(std::string &line);
+
     shared_simple make_simple(std::string date, std::string tag, double amount);
+
+    shared_abo make_abo(std::string date, std::string tag, double amount);
 
     shared_month make_month(std::string monthNr);
 

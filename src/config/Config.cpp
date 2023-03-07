@@ -121,7 +121,7 @@ void Config::loadEntries()
                 if (!Okane::matchesEntry(line))
                     continue;
 
-                monthEntry->add(SimpleEntry::fromString(line));
+                monthEntry->add(Entry::fromString(line));
             }
 
             year->add(monthEntry);

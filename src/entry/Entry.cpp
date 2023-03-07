@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-std::string SimpleEntry::getDate() const
+std::string SimpleEntry::getDate() const 
 {
     return m_Date;
 }
@@ -19,7 +19,22 @@ double SimpleEntry::getAmount() const
     return m_Amount;
 }
 
-shared_simple SimpleEntry::fromString(std::string &line)
+EntryType SimpleEntry::getType() const
+{
+    return EntryType::SIMPLE;
+}
+
+EntryType AboEntry::getType() const
+{
+    return EntryType::ABO;
+}
+
+PayInterval AboEntry::getInterval() const
+{
+    return m_Interval;
+}
+
+shared_simple Entry::fromString(std::string &line)
 {
     std::vector<std::string> parts;
 
@@ -88,6 +103,11 @@ void YearEntry::add(const shared_month &month)
 shared_simple Entry::make_simple(std::string date, std::string tag, double amount)
 {
     return std::make_shared<SimpleEntry>(date, tag, amount);
+}
+
+shared_abo Entry::make_abo(std::string date, std::string tag, double amount)
+{
+    return std::make_shared<AboEntry>(date, tag, amount);
 }
 
 shared_month Entry::make_month(std::string monthNr)
