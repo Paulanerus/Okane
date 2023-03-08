@@ -20,7 +20,7 @@ public:
             return;
         }
 
-        Config::appConfig.currency = args.at(0);
+        Config::appConfig.currency = args[0];
 
         std::cout << rang::fg::green << "Currency set to '" << Config::appConfig.currency << "'" << rang::style::reset << std::endl;
     }

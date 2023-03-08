@@ -17,20 +17,20 @@ public:
             return;
         }
 
-        if (!Okane::Regex::matchesIndex(args.at(0)))
+        if (!Okane::Regex::matchesIndex(args[0]))
         {
             std::cout << "Please enter a valid index (0, 1 or 20)";
             return;
         }
 
-        size_t index = std::stoul(args.at(0));
+        size_t index = std::stoul(args[0]);
 
         std::string month = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%m");
         std::string year = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%Y");
 
         if (args.size() >= 2)
         {
-            auto monthById = Okane::Time::getMonthFromId(args.at(1));
+            auto monthById = Okane::Time::getMonthFromId(args[1]);
 
             if (!monthById.has_value())
             {
@@ -45,7 +45,7 @@ public:
                 return;
             }
 
-            auto yearArg = args.at(2);
+            auto yearArg = args[2];
 
             if (!Okane::Regex::matchesYear(yearArg))
             {

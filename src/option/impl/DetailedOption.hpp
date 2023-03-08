@@ -19,7 +19,7 @@ public:
 
         if (args.size() == 1)
         {
-            auto monthById = Okane::Time::getMonthFromId(args.at(0));
+            auto monthById = Okane::Time::getMonthFromId(args[0]);
 
             if (!monthById.has_value())
             {
@@ -31,7 +31,7 @@ public:
         }
         else if (args.size() > 1)
         {
-            auto monthById = Okane::Time::getMonthFromId(args.at(0));
+            auto monthById = Okane::Time::getMonthFromId(args[0]);
 
             if (!monthById.has_value())
             {
@@ -41,7 +41,7 @@ public:
 
             month = monthById.value();
 
-            auto yearArg = args.at(1);
+            auto yearArg = args[1];
 
             if (!Okane::Regex::matchesYear(yearArg))
             {
