@@ -43,46 +43,19 @@ public:
 
         if (args.size() > 2)
         {
-            if (!Okane::Regex::matchesDate(args[2]))
+
+            std::string date;
+            if (!Okane::Time::getFormatDate(args[2], date))
             {
                 std::cout << "Please enter a valid date (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)";
                 return;
             }
 
-            auto parts = Okane::String::split_str(args[2], '.');
+            const auto parts = Okane::String::split_str(date, '.');
 
-            auto dayPart = parts[0];
-
-            if (!Okane::Regex::matchesDay(dayPart))
-            {
-                std::cout << "Please provide a valid Day (1, 23 or 31)";
-                return;
-            }
-
-            if (dayPart.length() == 1)
-                dayPart = "0" + dayPart;
-
-            day = dayPart;
-
-            auto monthById = Okane::Time::getMonthFromId(parts[1]);
-
-            if (!monthById.has_value())
-            {
-                std::cout << "Please provide a valid Month (01 or 1)";
-                return;
-            }
-
-            month = monthById.value();
-
-            auto yearArg = parts[2];
-
-            if (!Okane::Regex::matchesYear(yearArg))
-            {
-                std::cout << "Please provide a valid Year (2022 or 2023)";
-                return;
-            }
-
-            year = yearArg;
+            day = parts[0];
+            month = parts[1];
+            year = parts[2];
         }
 
         if (day == "29" && month == "02" && !Okane::Time::isLeapYear(std::stol(year)))

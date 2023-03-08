@@ -19,7 +19,7 @@ namespace Okane
             return stream.str();
         }
 
-        inline std::vector<std::string> split_str(const std::string &str, const char &delimiter)
+        inline std::vector<std::string> split_str(const std::string &str, char delimiter)
         {
             std::vector<std::string> parts;
 

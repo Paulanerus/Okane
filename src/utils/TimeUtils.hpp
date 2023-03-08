@@ -1,5 +1,8 @@
 #pragma once
 
+#include "RegexUtils.hpp"
+#include "StringUtils.hpp"
+
 #include <ctime>
 #include <string>
 #include <vector>
@@ -44,6 +47,26 @@ namespace Okane
             }
 
             return {};
+        }
+
+        inline bool getFormatDate(const std::string &date, std::string &insertTo)
+        {
+            if (!Okane::Regex::matchesDate(date))
+                return false;
+
+            const auto dateSplit = Okane::String::split_str(date, '.');
+
+            if (!Okane::Regex::matchesDay(dateSplit[0]) || !getMonthFromId(dateSplit[1]).has_value() || !Okane::Regex::matchesYear(dateSplit[2]))
+                return false;
+
+            std::stringstream formatDate;
+            formatDate << std::setw(2) << std::setfill('0') << dateSplit[0] << '.'
+                       << std::setw(2) << std::setfill('0') << dateSplit[1] << '.'
+                       << dateSplit[2];
+
+            insertTo = formatDate.str();
+
+            return true;
         }
 
         inline tm *getCurrentTime()
