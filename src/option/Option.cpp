@@ -1,7 +1,5 @@
 #include "Option.hpp"
 
-#include <algorithm>
-
 #include "impl/HelpOption.hpp"
 #include "impl/DetailedOption.hpp"
 #include "impl/StatusOption.hpp"
@@ -33,11 +31,4 @@ std::vector<std::string> Option::copyAfter(int argc, char **args)
         argsLeft.emplace_back(args[i]);
 
     return argsLeft;
-}
-
-void Option::toLowerStr(std::string &str)
-{
-    std::transform(str.begin(), str.end(), str.begin(),
-                   [](unsigned char c)
-                   { return std::tolower(c); });
 }

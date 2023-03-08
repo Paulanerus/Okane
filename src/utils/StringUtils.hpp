@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <sstream>
 #include <iomanip>
@@ -17,6 +18,14 @@ namespace Okane
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << value;
             return stream.str();
+        }
+
+        inline std::string toLower(std::string str)
+        {
+            std::transform(str.begin(), str.end(), str.begin(),
+                           [](unsigned char c)
+                           { return std::tolower(c); });
+            return str;
         }
 
         inline std::vector<std::string> split_str(const std::string &str, char delimiter)
