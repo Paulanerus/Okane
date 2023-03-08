@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../Option.hpp"
-#include "../../regex/RegexHelper.hpp"
+#include "../../utils/OkaneUtils.hpp"
 #include "../../entry/Entry.hpp"
-#include "../../time/Time.hpp"
 #include "../../config/Config.hpp"
 
 #include <iostream>
@@ -23,43 +22,38 @@ public:
         double amount{};
         std::string tag;
 
-        std::string day = Okane::toStringFMT(Okane::getCurrentTime(), "%d");
-        std::string month = Okane::toStringFMT(Okane::getCurrentTime(), "%m");
-        std::string year = Okane::toStringFMT(Okane::getCurrentTime(), "%Y");
+        std::string day = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%d");
+        std::string month = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%m");
+        std::string year = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%Y");
 
-        if (!Okane::matchesAmount(args.at(0)))
+        if (!Okane::Regex::matchesAmount(args[0]))
         {
             std::cout << "Please enter a valid amount number (100, -6.6 or 12.35)";
             return;
         }
 
-        if (!Okane::matchesTag(args.at(1)))
+        if (!Okane::Regex::matchesTag(args[1]))
         {
             std::cout << "Please enter a valid tag";
             return;
         }
 
-        amount = std::stod(args.at(0));
+        amount = std::stod(args[0]);
         tag = args.at(1);
 
         if (args.size() > 2)
         {
-            if (!Okane::matchesDate(args.at(2)))
+            if (!Okane::Regex::matchesDate(args[2]))
             {
                 std::cout << "Please enter a valid date (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)";
                 return;
             }
 
-            std::vector<std::string> parts;
-            std::stringstream stream(args.at(2));
-            std::string tmp;
+            auto parts = Okane::String::split_str(args[2], '.');
 
-            while (std::getline(stream, tmp, '.'))
-                parts.push_back(tmp);
+            auto dayPart = parts[0];
 
-            auto dayPart = parts.at(0);
-
-            if (!Okane::matchesDay(dayPart))
+            if (!Okane::Regex::matchesDay(dayPart))
             {
                 std::cout << "Please provide a valid Day (1, 23 or 31)";
                 return;
@@ -70,7 +64,7 @@ public:
 
             day = dayPart;
 
-            auto monthById = Okane::getMonthFromId(parts.at(1));
+            auto monthById = Okane::Time::getMonthFromId(parts[1]);
 
             if (!monthById.has_value())
             {
@@ -80,9 +74,9 @@ public:
 
             month = monthById.value();
 
-            auto yearArg = parts.at(2);
+            auto yearArg = parts[2];
 
-            if (!Okane::matchesYear(yearArg))
+            if (!Okane::Regex::matchesYear(yearArg))
             {
                 std::cout << "Please provide a valid Year (2022 or 2023)";
                 return;
@@ -91,7 +85,7 @@ public:
             year = yearArg;
         }
 
-        if (day == "29" && month == "02" && !Okane::isLeapYear(std::stol(year)))
+        if (day == "29" && month == "02" && !Okane::Time::isLeapYear(std::stol(year)))
         {
             std::cout << "You've entered " << day << '.' << month << '.' << year << " Which is not a valid year (not a leap year)";
             return;

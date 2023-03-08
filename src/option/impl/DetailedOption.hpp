@@ -1,10 +1,9 @@
 #pragma once
 
 #include "../Option.hpp"
-#include "../../time/Time.hpp"
+#include "../../utils/OkaneUtils.hpp"
 #include "../../entry/Entry.hpp"
 #include "../../table/TableView.hpp"
-#include "../../regex/RegexHelper.hpp"
 #include "../../config/Config.hpp"
 
 #include <iostream>
@@ -15,12 +14,12 @@ class DetailedOption : public Option
 public:
     void execute(const std::vector<std::string> &args) override
     {
-        std::string month = Okane::toStringFMT(Okane::getCurrentTime(), "%m");
-        std::string year = Okane::toStringFMT(Okane::getCurrentTime(), "%Y");
+        std::string month = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%m");
+        std::string year = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%Y");
 
         if (args.size() == 1)
         {
-            auto monthById = Okane::getMonthFromId(args.at(0));
+            auto monthById = Okane::Time::getMonthFromId(args.at(0));
 
             if (!monthById.has_value())
             {
@@ -32,7 +31,7 @@ public:
         }
         else if (args.size() > 1)
         {
-            auto monthById = Okane::getMonthFromId(args.at(0));
+            auto monthById = Okane::Time::getMonthFromId(args.at(0));
 
             if (!monthById.has_value())
             {
@@ -44,7 +43,7 @@ public:
 
             auto yearArg = args.at(1);
 
-            if (!Okane::matchesYear(yearArg))
+            if (!Okane::Regex::matchesYear(yearArg))
             {
                 std::cout << "Please provide a valid Year (2022 or 2023)" << std::endl;
                 return;
@@ -68,7 +67,7 @@ public:
         tableView.addRow({"Index", "Date", "Tag", "Amount"});
 
         for (size_t i = 0; i < monthEntry->entries.size(); i++)
-            tableView.addRow({TableView::to_string(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), TableView::to_string(monthEntry->entries[i]->getAmount()) + " " + Config::appConfig.currency});
+            tableView.addRow({Okane::String::toString(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), Okane::String::toString(monthEntry->entries[i]->getAmount()) + " " + Config::appConfig.currency});
 
         tableView.print();
     }

@@ -2,7 +2,7 @@
 
 #include "rang.hpp"
 
-#include "../regex/RegexHelper.hpp"
+#include "../utils/RegexUtils.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -93,7 +93,7 @@ void Config::loadEntries()
     {
         auto entryName = entry.path().filename().string();
 
-        if (!entry.is_directory() || !Okane::matchesYear(entryName))
+        if (!entry.is_directory() || !Okane::Regex::matchesYear(entryName))
             continue;
 
         auto year = Entry::make_year(entryName);
@@ -104,7 +104,7 @@ void Config::loadEntries()
         {
             auto monthEntryName = month.path().filename().string();
 
-            if (!month.is_regular_file() || !Okane::matchesMonth(monthEntryName))
+            if (!month.is_regular_file() || !Okane::Regex::matchesMonth(monthEntryName))
                 continue;
 
             std::ifstream monthFile;
@@ -118,7 +118,7 @@ void Config::loadEntries()
             std::string line;
             while (std::getline(monthFile, line))
             {
-                if (!Okane::matchesEntry(line))
+                if (!Okane::Regex::matchesEntry(line))
                     continue;
 
                 monthEntry->add(Entry::fromString(line));

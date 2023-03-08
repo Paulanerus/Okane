@@ -1,6 +1,7 @@
 #include "Entry.hpp"
 
 #include "../config/Config.hpp"
+#include "../utils/StringUtils.hpp"
 
 #include <sstream>
 
@@ -36,13 +37,7 @@ PayInterval AboEntry::getInterval() const
 
 shared_simple Entry::fromString(std::string &line)
 {
-    std::vector<std::string> parts;
-
-    std::stringstream stream(line);
-    std::string tmp;
-
-    while (std::getline(stream, tmp, ';'))
-        parts.push_back(tmp);
+    auto parts = Okane::String::split_str(line, ';');
 
     return Entry::make_simple(parts[0], parts[1], std::stod(parts[2]));
 }

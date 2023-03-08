@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <numeric>
+#include <iomanip>
 
 TableView::TableView(char row, char border, char corner) : m_Row(row), m_Border(border), m_Corner(corner)
 {
