@@ -70,7 +70,7 @@ public:
             if (monthEntry->entries[i]->getType() == EntryType::ABO && std::static_pointer_cast<AboEntry>(monthEntry->entries[i])->getInterval() == PayInterval::YEARLY)
                 amount /= 12;
 
-            tableView.addRow({Okane::String::toString(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), Okane::String::toString(amount) + " " + Config::appConfig.currency});
+            tableView.addRow({std::to_string(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), std::to_string(amount) + " " + Config::appConfig.currency});
         }
 
         tableView.print();

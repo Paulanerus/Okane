@@ -160,7 +160,7 @@ void Config::loadAbos()
 
         auto aboFromStr = Entry::fromStringAbo(line);
 
-        auto aboDate = Okane::String::split_str(aboFromStr->getDate(), '.');
+        auto aboDate = Okane::String::splitStr(aboFromStr->getDate(), '.');
 
         for (const auto &year : appConfig.years)
         {

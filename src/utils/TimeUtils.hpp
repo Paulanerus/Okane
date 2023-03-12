@@ -54,7 +54,7 @@ namespace Okane
             if (!Okane::Regex::matchesDate(date))
                 return false;
 
-            const auto dateSplit = Okane::String::split_str(date, '.');
+            const auto dateSplit = Okane::String::splitStr(date, '.');
 
             if (!Okane::Regex::matchesDay(dateSplit[0]) || !getMonthFromId(dateSplit[1]).has_value() || !Okane::Regex::matchesYear(dateSplit[2]))
                 return false;

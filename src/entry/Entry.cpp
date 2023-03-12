@@ -42,14 +42,14 @@ void AboEntry::setAmount(double amount)
 
 shared_simple Entry::fromString(const std::string &line)
 {
-    auto parts = Okane::String::split_str(line, ';');
+    auto parts = Okane::String::splitStr(line, ';');
 
     return Entry::make_simple(parts[0], parts[1], std::stod(parts[2]));
 }
 
 shared_abo Entry::fromStringAbo(const std::string &line)
 {
-    auto parts = Okane::String::split_str(line, ';');
+    auto parts = Okane::String::splitStr(line, ';');
 
     return Entry::make_abo(parts[0], parts[1], std::stod(parts[2]), parts[3] == "1" ? PayInterval::YEARLY : PayInterval::MONTHLY);
 }

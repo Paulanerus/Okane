@@ -51,7 +51,7 @@ public:
                 return;
             }
 
-            const auto parts = Okane::String::split_str(date, '.');
+            const auto parts = Okane::String::splitStr(date, '.');
 
             day = parts[0];
             month = parts[1];

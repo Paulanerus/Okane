@@ -66,10 +66,10 @@ public:
         TableView tableView;
 
         tableView.addRow({"Category", "Amount"});
-        tableView.addRow({"Income", Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency});
-        tableView.addRow({"Abos", Okane::String::toString(monthEntry->getAbos()) + " " + Config::appConfig.currency});
-        tableView.addRow({"Expenses", Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency});
-        tableView.addRow({"Balance", Okane::String::toString(monthEntry->getBalance()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Income", std::to_string(monthEntry->getIncome()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Abos", std::to_string(monthEntry->getAbos()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Expenses", std::to_string(monthEntry->getExpenses()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Balance", std::to_string(monthEntry->getBalance()) + " " + Config::appConfig.currency});
 
         tableView.print();
     }

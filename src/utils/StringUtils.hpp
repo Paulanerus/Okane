@@ -11,15 +11,6 @@ namespace Okane
 
     namespace String
     {
-
-        template <typename T>
-        inline std::string toString(T const &value)
-        {
-            std::stringstream stream;
-            stream << std::fixed << std::setprecision(2) << value;
-            return stream.str();
-        }
-
         inline std::string toLower(std::string str)
         {
             std::transform(str.begin(), str.end(), str.begin(),
@@ -28,7 +19,7 @@ namespace Okane
             return str;
         }
 
-        inline std::vector<std::string> split_str(const std::string &str, char delimiter)
+        inline std::vector<std::string> splitStr(const std::string &str, char delimiter)
         {
             std::vector<std::string> parts;
 
