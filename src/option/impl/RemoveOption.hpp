@@ -4,6 +4,7 @@
 #include "../../utils/RegexUtils.hpp"
 #include "../../utils/TimeUtils.hpp"
 #include "../../entry/Entry.hpp"
+#include "../../config/Config.hpp"
 #include <iostream>
 #include <unordered_set>
 
