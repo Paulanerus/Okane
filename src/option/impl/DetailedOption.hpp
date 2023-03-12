@@ -60,14 +60,18 @@ public:
             return;
         }
 
-        std::sort(monthEntry->entries.begin(), monthEntry->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
-                  { return e1->getDate() < e2->getDate(); });
-
         TableView tableView;
         tableView.addRow({"Index", "Date", "Tag", "Amount"});
 
         for (size_t i = 0; i < monthEntry->entries.size(); i++)
-            tableView.addRow({Okane::String::toString(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), Okane::String::toString(monthEntry->entries[i]->getAmount()) + " " + Config::appConfig.currency});
+        {
+            auto amount = monthEntry->entries[i]->getAmount();
+
+            if (monthEntry->entries[i]->getType() == EntryType::ABO && std::static_pointer_cast<AboEntry>(monthEntry->entries[i])->getInterval() == PayInterval::YEARLY)
+                amount /= 12;
+
+            tableView.addRow({Okane::String::toString(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), Okane::String::toString(amount) + " " + Config::appConfig.currency});
+        }
 
         tableView.print();
     }

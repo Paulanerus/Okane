@@ -48,6 +48,8 @@ public:
 
     PayInterval getInterval() const;
 
+    void setAmount(double amount);
+
 private:
     PayInterval m_Interval;
 };
@@ -65,11 +67,13 @@ struct MonthEntry
 
     bool erase(const size_t index);
 
-    double getIncome();
+    double getIncome() const;
 
-    double getExpenses();
+    double getAbos() const;
 
-    double getBalance();
+    double getExpenses() const;
+
+    double getBalance() const;
 };
 
 typedef std::shared_ptr<MonthEntry> shared_month;
@@ -88,7 +92,9 @@ typedef std::shared_ptr<YearEntry> shared_year;
 
 namespace Entry
 {
-    shared_simple fromString(std::string &line);
+    shared_simple fromString(const std::string &line);
+
+    shared_abo fromStringAbo(const std::string &line);
 
     shared_simple make_simple(std::string date, std::string tag, double amount);
 

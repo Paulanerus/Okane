@@ -5,6 +5,7 @@
 #include "../../utils/TimeUtils.hpp"
 #include "../../entry/Entry.hpp"
 #include <iostream>
+#include <unordered_set>
 
 class RemoveOption : public Option
 {
@@ -64,6 +65,36 @@ public:
             return;
         }
 
+        if (index >= 0 && index < monthEntry->entries.size() && monthEntry->entries[index]->getType() == EntryType::ABO)
+        {
+            std::cout
+                << "The provided index belongs to an abo entry. Do want to completely delete the abo? (Y/n)" << std::endl;
+
+            char input = std::getchar();
+
+            if (ALLOWED_YES.find(input) == ALLOWED_YES.end())
+            {
+                std::cout << "Aborted...";
+                return;
+            }
+
+            auto castPtr = std::static_pointer_cast<AboEntry>(monthEntry->entries[index]);
+
+            auto aboEntry = std::find_if(Config::appConfig.abos.begin(), Config::appConfig.abos.end(), [castPtr](const shared_abo &abo)
+                                         { return abo->getTag() == castPtr->getTag() && abo->getAmount() == castPtr->getAmount(); });
+
+            if (aboEntry == Config::appConfig.abos.end())
+            {
+                std::cout << "Surprise! The entry isn't there anymore... (You should not see this)";
+                return;
+            }
+
+            Config::appConfig.abos.erase(aboEntry);
+
+            std::cout << "Successfully removed Abo";
+            return;
+        }
+
         if (!monthEntry->erase(index))
         {
             std::cout << "Your provided index (" << index << ") is greater than the amount of entries for " << month << '.' << year;
@@ -72,4 +103,7 @@ public:
 
         std::cout << "Successfully removed Entry";
     }
+
+private:
+    const std::unordered_set<char> ALLOWED_YES = {'y', 'Y', '\n'};
 };

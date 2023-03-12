@@ -6,6 +6,7 @@
 #include "impl/AddOption.hpp"
 #include "impl/CurrencyOption.hpp"
 #include "impl/RemoveOption.hpp"
+#include "impl/AboOption.hpp"
 
 const std::unordered_map<std::string, std::shared_ptr<Option>> Option::m_Args = {
     {"help", std::make_shared<HelpOption>()},
@@ -14,6 +15,7 @@ const std::unordered_map<std::string, std::shared_ptr<Option>> Option::m_Args = 
     {"add", std::make_shared<AddOption>()},
     {"currency", std::make_shared<CurrencyOption>()},
     {"remove", std::make_shared<RemoveOption>()},
+    {"abo", std::make_shared<AboOption>()},
 };
 
 std::shared_ptr<Option> Option::find(const std::string &arg)

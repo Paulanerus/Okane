@@ -23,6 +23,8 @@ namespace Okane
 
         const std::regex INDEX_REGEX{"^[0-9]+$"};
 
+        const std::regex ABO_REGEX{"^\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+;[01]$"};
+
         inline bool matchesYear(const std::string &toMatch)
         {
             return std::regex_match(toMatch, YEAR_REGEX);
@@ -61,6 +63,11 @@ namespace Okane
         inline bool matchesIndex(const std::string &toMatch)
         {
             return std::regex_match(toMatch, INDEX_REGEX);
+        }
+
+        inline bool matchesAbo(const std::string &toMatch)
+        {
+            return std::regex_match(toMatch, ABO_REGEX);
         }
     }
 }

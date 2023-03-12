@@ -8,6 +8,7 @@
 #include "../../table/TableView.hpp"
 #include "../../config/Config.hpp"
 
+#include <numeric>
 #include <iostream>
 
 class StatusOption : public Option
@@ -64,10 +65,11 @@ public:
 
         TableView tableView;
 
-        tableView << "Balance";
-        tableView << Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency;
-        tableView << Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency;
-        tableView << Okane::String::toString(monthEntry->getBalance()) + " " + Config::appConfig.currency;
+        tableView.addRow({"Category", "Amount"});
+        tableView.addRow({"Income", Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Abos", Okane::String::toString(monthEntry->getAbos()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Expenses", Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Balance", Okane::String::toString(monthEntry->getBalance()) + " " + Config::appConfig.currency});
 
         tableView.print();
     }
