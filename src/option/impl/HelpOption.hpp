@@ -5,7 +5,6 @@
 
 #include <iostream>
 #include <map>
-#include <sstream>
 
 class HelpOption : public Option
 {
@@ -18,6 +17,7 @@ private:
         {"currency", "<currency> -> Changes the currency"},
         {"add", "<amount> <tag> <date> -> Adds a specified amount and tag to a provided month and year"},
         {"remove", "<index> <month> <year> -> Removes a specified entry from a provided index, month and year"},
+        {"abo", "<amount> <tag> <interval> <date> -> Adds an entry that repeats at a specified interval and starts on the provided date"},
     };
 
 public:

@@ -16,6 +16,8 @@ private:
 
     std::string configPath;
 
+    std::string aboPath;
+
     std::string getDirectory();
 
     void loadFile();
@@ -25,6 +27,12 @@ private:
     void loadEntries();
 
     void saveEntries();
+
+    void loadAbos();
+
+    void saveAbos();
+
+    void sortEntries();
 
     void checkAndCreateDir();
 };

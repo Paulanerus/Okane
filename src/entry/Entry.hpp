@@ -1,21 +1,60 @@
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 #include <memory>
 
-struct SimpleEntry
+enum EntryType
 {
-    std::string date;
-    std::string tag;
-    double amount;
+    SIMPLE,
+    ABO,
+};
 
-    SimpleEntry(std::string date, std::string tag, double amount) : date(date), tag(tag), amount(amount) {}
+enum PayInterval
+{
+    MONTHLY,
+    YEARLY,
+};
 
-    static std::shared_ptr<SimpleEntry> fromString(std::string &line);
+class SimpleEntry
+{
+public:
+    SimpleEntry(std::string date, std::string tag, double amount) : m_Date(date), m_Tag(tag), m_Amount(amount) {}
+
+    std::string getDate() const;
+
+    std::string getTag() const;
+
+    double getAmount() const;
+
+    virtual EntryType getType() const;
+
+protected:
+    std::string m_Date;
+
+    std::string m_Tag;
+
+    double m_Amount;
 };
 
 typedef std::shared_ptr<SimpleEntry> shared_simple;
+
+class AboEntry : public SimpleEntry
+{
+public:
+    AboEntry(std::string date, std::string tag, double amount, PayInterval interval) : SimpleEntry(date, tag, amount), m_Interval(interval) {}
+
+    EntryType getType() const override;
+
+    PayInterval getInterval() const;
+
+    void setAmount(double amount);
+
+private:
+    PayInterval m_Interval;
+};
+
+typedef std::shared_ptr<AboEntry> shared_abo;
 
 struct MonthEntry
 {
@@ -28,11 +67,13 @@ struct MonthEntry
 
     bool erase(const size_t index);
 
-    double getIncome();
+    double getIncome() const;
 
-    double getExpenses();
+    double getAbos() const;
 
-    double getBalance();
+    double getExpenses() const;
+
+    double getBalance() const;
 };
 
 typedef std::shared_ptr<MonthEntry> shared_month;
@@ -51,7 +92,13 @@ typedef std::shared_ptr<YearEntry> shared_year;
 
 namespace Entry
 {
+    shared_simple fromString(const std::string &line);
+
+    shared_abo fromStringAbo(const std::string &line);
+
     shared_simple make_simple(std::string date, std::string tag, double amount);
+
+    shared_abo make_abo(std::string date, std::string tag, double amount, PayInterval interval);
 
     shared_month make_month(std::string monthNr);
 

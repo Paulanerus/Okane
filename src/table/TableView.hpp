@@ -2,21 +2,11 @@
 
 #include <vector>
 #include <string>
-#include <sstream>
-#include <iomanip>
 
 class TableView
 {
 public:
     TableView(char row = '-', char border = '|', char corner = '+');
-
-    template <typename T>
-    static std::string to_string(T const &value)
-    {
-        std::stringstream stream;
-        stream << std::fixed << std::setprecision(2) << value;
-        return stream.str();
-    }
 
     void print();
 

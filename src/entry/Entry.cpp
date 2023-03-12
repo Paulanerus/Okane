@@ -1,20 +1,57 @@
 #include "Entry.hpp"
 
 #include "../config/Config.hpp"
+#include "../utils/StringUtils.hpp"
 
 #include <sstream>
 
-shared_simple SimpleEntry::fromString(std::string &line)
+std::string SimpleEntry::getDate() const
 {
-    std::vector<std::string> parts;
+    return m_Date;
+}
 
-    std::stringstream stream(line);
-    std::string tmp;
+std::string SimpleEntry::getTag() const
+{
+    return m_Tag;
+}
 
-    while (std::getline(stream, tmp, ';'))
-        parts.push_back(tmp);
+double SimpleEntry::getAmount() const
+{
+    return m_Amount;
+}
+
+EntryType SimpleEntry::getType() const
+{
+    return EntryType::SIMPLE;
+}
+
+EntryType AboEntry::getType() const
+{
+    return EntryType::ABO;
+}
+
+PayInterval AboEntry::getInterval() const
+{
+    return m_Interval;
+}
+
+void AboEntry::setAmount(double amount)
+{
+    this->m_Amount = amount;
+}
+
+shared_simple Entry::fromString(const std::string &line)
+{
+    auto parts = Okane::String::split_str(line, ';');
 
     return Entry::make_simple(parts[0], parts[1], std::stod(parts[2]));
+}
+
+shared_abo Entry::fromStringAbo(const std::string &line)
+{
+    auto parts = Okane::String::split_str(line, ';');
+
+    return Entry::make_abo(parts[0], parts[1], std::stod(parts[2]), parts[3] == "1" ? PayInterval::YEARLY : PayInterval::MONTHLY);
 }
 
 void MonthEntry::add(const shared_simple &entry)
@@ -24,7 +61,7 @@ void MonthEntry::add(const shared_simple &entry)
 
 bool MonthEntry::erase(const size_t index)
 {
-    if (index >= entries.size())
+    if (index >= entries.size() || index < 0)
     {
         return false;
     }
@@ -34,35 +71,52 @@ bool MonthEntry::erase(const size_t index)
     return true;
 }
 
-double MonthEntry::getIncome()
+double MonthEntry::getIncome() const
 {
     double totalIncome{};
 
     for (const auto &entry : entries)
     {
-        if (entry->amount > 0)
-            totalIncome += entry->amount;
+        if (entry->getAmount() > 0 && entry->getType() == EntryType::SIMPLE)
+            totalIncome += entry->getAmount();
     }
 
     return totalIncome;
 }
 
-double MonthEntry::getExpenses()
+double MonthEntry::getAbos() const
+{
+    double totalAbos{};
+
+    for (const auto &entry : entries)
+    {
+        if (entry->getType() == EntryType::SIMPLE)
+            continue;
+
+        auto abo = std::static_pointer_cast<AboEntry>(entry);
+
+        totalAbos += abo->getAmount() / (abo->getInterval() == PayInterval::YEARLY ? 12 : 1);
+    }
+
+    return totalAbos;
+}
+
+double MonthEntry::getExpenses() const
 {
     double totalExpenses{};
 
     for (const auto &entry : entries)
     {
-        if (entry->amount < 0)
-            totalExpenses += entry->amount;
+        if (entry->getAmount() < 0 && entry->getType() == EntryType::SIMPLE)
+            totalExpenses += entry->getAmount();
     }
 
     return totalExpenses;
 }
 
-double MonthEntry::getBalance()
+double MonthEntry::getBalance() const
 {
-    return getIncome() + getExpenses();
+    return getIncome() + getExpenses() + getAbos();
 }
 
 void YearEntry::add(const shared_month &month)
@@ -73,6 +127,11 @@ void YearEntry::add(const shared_month &month)
 shared_simple Entry::make_simple(std::string date, std::string tag, double amount)
 {
     return std::make_shared<SimpleEntry>(date, tag, amount);
+}
+
+shared_abo Entry::make_abo(std::string date, std::string tag, double amount, PayInterval interval)
+{
+    return std::make_shared<AboEntry>(date, tag, amount, interval);
 }
 
 shared_month Entry::make_month(std::string monthNr)

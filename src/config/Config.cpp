@@ -2,7 +2,8 @@
 
 #include "rang.hpp"
 
-#include "../regex/RegexHelper.hpp"
+#include "../utils/RegexUtils.hpp"
+#include "../utils/StringUtils.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -16,11 +17,15 @@ Config::Config()
 {
     baseDir = getDirectory();
     configPath = baseDir + "/okane.txt";
+    aboPath = baseDir + "/abos.csv";
 
     checkAndCreateDir();
 
     loadFile();
     loadEntries();
+    loadAbos();
+
+    sortEntries();
 }
 
 Config::~Config()
@@ -29,6 +34,7 @@ Config::~Config()
 
     saveFile();
     saveEntries();
+    saveAbos();
 }
 
 void Config::checkAndCreateDir()
@@ -80,7 +86,12 @@ void Config::saveEntries()
                 continue;
 
             for (const auto &entry : month->entries)
-                monthFile << entry->date << ';' << entry->tag << ';' << std::fixed << std::setprecision(2) << entry->amount << '\n';
+            {
+                if (entry->getType() == EntryType::ABO)
+                    continue;
+
+                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << std::fixed << std::setprecision(2) << entry->getAmount() << '\n';
+            }
         }
     }
 }
@@ -93,7 +104,7 @@ void Config::loadEntries()
     {
         auto entryName = entry.path().filename().string();
 
-        if (!entry.is_directory() || !Okane::matchesYear(entryName))
+        if (!entry.is_directory() || !Okane::Regex::matchesYear(entryName))
             continue;
 
         auto year = Entry::make_year(entryName);
@@ -104,7 +115,7 @@ void Config::loadEntries()
         {
             auto monthEntryName = month.path().filename().string();
 
-            if (!month.is_regular_file() || !Okane::matchesMonth(monthEntryName))
+            if (!month.is_regular_file() || !Okane::Regex::matchesMonth(monthEntryName))
                 continue;
 
             std::ifstream monthFile;
@@ -118,16 +129,84 @@ void Config::loadEntries()
             std::string line;
             while (std::getline(monthFile, line))
             {
-                if (!Okane::matchesEntry(line))
+                if (!Okane::Regex::matchesEntry(line))
                     continue;
 
-                monthEntry->add(SimpleEntry::fromString(line));
+                monthEntry->add(Entry::fromString(line));
             }
 
             year->add(monthEntry);
         }
 
         appConfig.years.push_back(year);
+    }
+}
+
+void Config::loadAbos()
+{
+    if (!fs::exists(aboPath) || fs::is_empty(aboPath))
+        return;
+
+    std::ifstream aboFile{aboPath};
+
+    if (!aboFile.is_open())
+        return;
+
+    std::string line;
+    while (std::getline(aboFile, line))
+    {
+        if (!Okane::Regex::matchesAbo(line))
+            continue;
+
+        auto aboFromStr = Entry::fromStringAbo(line);
+
+        auto aboDate = Okane::String::split_str(aboFromStr->getDate(), '.');
+
+        for (const auto &year : appConfig.years)
+        {
+            if (year->yearNr < aboDate[2])
+                continue;
+
+            for (const auto &month : year->months)
+            {
+                if (month->monthNr < aboDate[1])
+                    continue;
+
+                month->add(aboFromStr);
+            }
+        }
+
+        appConfig.abos.push_back(aboFromStr);
+    }
+}
+
+void Config::saveAbos()
+{
+    std::ofstream aboFile;
+    aboFile.open(aboPath);
+
+    if (!aboFile.is_open())
+        return;
+
+    for (const auto &abo : appConfig.abos)
+        aboFile << abo->getDate() << ';' << abo->getTag() << ';' << std::fixed << std::setprecision(2) << abo->getAmount() << ";" << abo->getInterval() << '\n';
+}
+
+void Config::sortEntries()
+{
+    for (const auto &year : appConfig.years)
+    {
+        for (const auto &month : year->months)
+        {
+            std::sort(month->entries.begin(), month->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
+                      { 
+                    if(e1->getType() > e2->getType())
+                        return true;
+                    else if (e1->getType() < e2->getType())
+                        return false;
+
+                    return e1->getDate() < e2->getDate(); });
+        }
     }
 }
 

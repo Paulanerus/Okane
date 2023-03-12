@@ -1,13 +1,12 @@
 #include "Option.hpp"
 
-#include <algorithm>
-
 #include "impl/HelpOption.hpp"
 #include "impl/DetailedOption.hpp"
 #include "impl/StatusOption.hpp"
 #include "impl/AddOption.hpp"
 #include "impl/CurrencyOption.hpp"
 #include "impl/RemoveOption.hpp"
+#include "impl/AboOption.hpp"
 
 const std::unordered_map<std::string, std::shared_ptr<Option>> Option::m_Args = {
     {"help", std::make_shared<HelpOption>()},
@@ -16,6 +15,7 @@ const std::unordered_map<std::string, std::shared_ptr<Option>> Option::m_Args = 
     {"add", std::make_shared<AddOption>()},
     {"currency", std::make_shared<CurrencyOption>()},
     {"remove", std::make_shared<RemoveOption>()},
+    {"abo", std::make_shared<AboOption>()},
 };
 
 std::shared_ptr<Option> Option::find(const std::string &arg)
@@ -33,11 +33,4 @@ std::vector<std::string> Option::copyAfter(int argc, char **args)
         argsLeft.emplace_back(args[i]);
 
     return argsLeft;
-}
-
-void Option::toLowerStr(std::string &str)
-{
-    std::transform(str.begin(), str.end(), str.begin(),
-                   [](unsigned char c)
-                   { return std::tolower(c); });
 }

@@ -3,12 +3,12 @@
 #include "rang.hpp"
 
 #include "../Option.hpp"
-#include "../../time/Time.hpp"
+#include "../../utils/OkaneUtils.hpp"
 #include "../../entry/Entry.hpp"
 #include "../../table/TableView.hpp"
-#include "../../regex/RegexHelper.hpp"
 #include "../../config/Config.hpp"
 
+#include <numeric>
 #include <iostream>
 
 class StatusOption : public Option
@@ -17,12 +17,12 @@ class StatusOption : public Option
 public:
     void execute(const std::vector<std::string> &args) override
     {
-        std::string month = Okane::toStringFMT(Okane::getCurrentTime(), "%m");
-        std::string year = Okane::toStringFMT(Okane::getCurrentTime(), "%Y");
+        std::string month = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%m");
+        std::string year = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%Y");
 
         if (args.size() == 1)
         {
-            auto monthById = Okane::getMonthFromId(args.at(0));
+            auto monthById = Okane::Time::getMonthFromId(args[0]);
 
             if (!monthById.has_value())
             {
@@ -34,7 +34,7 @@ public:
         }
         else if (args.size() > 1)
         {
-            auto monthById = Okane::getMonthFromId(args.at(0));
+            auto monthById = Okane::Time::getMonthFromId(args[0]);
 
             if (!monthById.has_value())
             {
@@ -44,9 +44,9 @@ public:
 
             month = monthById.value();
 
-            auto yearArg = args.at(1);
+            auto yearArg = args[1];
 
-            if (!Okane::matchesYear(yearArg))
+            if (!Okane::Regex::matchesYear(yearArg))
             {
                 std::cout << "Please provide a valid Year (2022 or 2023)" << std::endl;
                 return;
@@ -65,10 +65,11 @@ public:
 
         TableView tableView;
 
-        tableView << "Balance";
-        tableView << TableView::to_string(monthEntry->getIncome()) + " " + Config::appConfig.currency;
-        tableView << TableView::to_string(monthEntry->getExpenses()) + " " + Config::appConfig.currency;
-        tableView << TableView::to_string(monthEntry->getBalance()) + " " + Config::appConfig.currency;
+        tableView.addRow({"Category", "Amount"});
+        tableView.addRow({"Income", Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Abos", Okane::String::toString(monthEntry->getAbos()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Expenses", Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency});
+        tableView.addRow({"Balance", Okane::String::toString(monthEntry->getBalance()) + " " + Config::appConfig.currency});
 
         tableView.print();
     }
