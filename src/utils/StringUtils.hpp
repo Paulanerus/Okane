@@ -11,6 +11,14 @@ namespace Okane
 
     namespace String
     {
+        template <typename T>
+        inline std::string toString(T const &value)
+        {
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(2) << value;
+            return stream.str();
+        }
+
         inline std::string toLower(std::string str)
         {
             std::transform(str.begin(), str.end(), str.begin(),

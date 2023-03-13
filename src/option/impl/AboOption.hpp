@@ -24,7 +24,7 @@ public:
             tableView->addRow({"Start date", "Tag", "Amount", "Interval"});
 
             for (const auto &abo : Config::appConfig.abos)
-                tableView->addRow({abo->getDate(), abo->getTag(), std::to_string(abo->getAmount()) + " " + Config::appConfig.currency, abo->getInterval() == 1 ? "Yearly" : "Monthly"});
+                tableView->addRow({abo->getDate(), abo->getTag(), Okane::String::toString(abo->getAmount()) + " " + Config::appConfig.currency, abo->getInterval() == 1 ? "Yearly" : "Monthly"});
 
             tableView->print();
 
