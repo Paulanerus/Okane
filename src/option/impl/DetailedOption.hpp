@@ -60,8 +60,8 @@ public:
             return;
         }
 
-        TableView tableView;
-        tableView.addRow({"Index", "Date", "Tag", "Amount"});
+        auto table = std::make_unique<TableView>();
+        table->addRow({"Index", "Date", "Tag", "Amount"});
 
         for (size_t i = 0; i < monthEntry->entries.size(); i++)
         {
@@ -70,9 +70,12 @@ public:
             if (monthEntry->entries[i]->getType() == EntryType::ABO && std::static_pointer_cast<AboEntry>(monthEntry->entries[i])->getInterval() == PayInterval::YEARLY)
                 amount /= 12;
 
-            tableView.addRow({std::to_string(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(), Okane::String::toString(amount) + " " + Config::appConfig.currency});
+            table->addRow(
+                {std::to_string(i), monthEntry->entries[i]->getDate(), monthEntry->entries[i]->getTag(),
+                 Okane::String::toStringWithStyle(Okane::String::toString(amount) + " " + Config::appConfig.currency, monthEntry->entries[i]->getType() == EntryType::ABO ? rang::fgB::yellow : amount < 0 ? rang::fgB::red
+                                                                                                                                                                                                           : rang::fgB::green)});
         }
 
-        tableView.print();
+        table->print();
     }
 };

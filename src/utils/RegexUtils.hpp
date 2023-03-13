@@ -25,6 +25,13 @@ namespace Okane
 
         const std::regex ABO_REGEX{"^\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+;[01]$"};
 
+        const std::regex STYLE_REGEX{"\033\\[[0-9]+m"};
+
+        inline std::string replace(const std::string &str, const std::regex &rgx, const std::string& replace)
+        {
+            return std::regex_replace(str, rgx, replace);
+        }
+
         inline bool matchesYear(const std::string &toMatch)
         {
             return std::regex_match(toMatch, YEAR_REGEX);

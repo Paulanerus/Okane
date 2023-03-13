@@ -1,5 +1,7 @@
 #include "TableView.hpp"
 
+#include "../utils/RegexUtils.hpp"
+
 #include <iostream>
 #include <numeric>
 #include <iomanip>
@@ -64,7 +66,7 @@ inline size_t TableView::getWidth(const std::string &str)
 
 inline size_t TableView::getPadding(const std::string &entry, size_t columnIndex)
 {
-    return (m_LongestOfEachRow[columnIndex] - getWidth(entry)) + 1;
+    return (m_LongestOfEachRow[columnIndex] - getWidth(Okane::Regex::replace(entry, Okane::Regex::STYLE_REGEX, ""))) + 1;
 }
 
 void TableView::collectColumnLongest()
@@ -74,8 +76,10 @@ void TableView::collectColumnLongest()
         size_t longest{};
         for (size_t j = 0; j < m_Rows.size(); j++)
         {
-            if (m_Rows[j][i].size() > longest)
-                longest = m_Rows[j][i].size();
+            auto noColorRgx = Okane::Regex::replace(m_Rows[j][i], Okane::Regex::STYLE_REGEX, "");
+
+            if (noColorRgx.size() > longest)
+                longest = noColorRgx.size();
         }
 
         m_LongestOfEachRow.push_back(longest);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "rang.hpp"
+
 #include <string>
 #include <algorithm>
 #include <vector>
@@ -11,6 +13,14 @@ namespace Okane
 
     namespace String
     {
+        template <typename T, typename U>
+        inline std::string toStringWithStyle(T const &value, U const &style)
+        {
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(2) << style << value << rang::style::reset;
+            return stream.str();
+        }
+
         template <typename T>
         inline std::string toString(T const &value)
         {

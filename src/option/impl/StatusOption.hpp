@@ -63,14 +63,16 @@ public:
             return;
         }
 
-        TableView tableView;
+        auto balance = monthEntry->getBalance();
 
-        tableView.addRow({"Category", "Amount"});
-        tableView.addRow({"Income", Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency});
-        tableView.addRow({"Abos", Okane::String::toString(monthEntry->getAbos()) + " " + Config::appConfig.currency});
-        tableView.addRow({"Expenses", Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency});
-        tableView.addRow({"Balance", Okane::String::toString(monthEntry->getBalance()) + " " + Config::appConfig.currency});
+        auto table = std::make_unique<TableView>();
 
-        tableView.print();
+        table->addRow({"Category", "Amount"});
+        table->addRow({"Income", Okane::String::toStringWithStyle(Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency, rang::fgB::green)});
+        table->addRow({"Abos", Okane::String::toStringWithStyle(Okane::String::toString(monthEntry->getAbos()) + " " + Config::appConfig.currency, rang::fgB::yellow)});
+        table->addRow({"Expenses", Okane::String::toStringWithStyle(Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency, rang::fgB::red)});
+        table->addRow({"Balance", Okane::String::toStringWithStyle(Okane::String::toString(balance) + " " + Config::appConfig.currency, balance < 0 ? rang::fgB::red : rang::fgB::green)});
+
+        table->print();
     }
 };
