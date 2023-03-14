@@ -23,7 +23,7 @@ public:
 
             if (!monthById.has_value())
             {
-                std::cout << "Please provide a valid Month (January, Jan, 01 or 1)" << std::endl;
+                Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
                 return;
             }
 
@@ -35,7 +35,7 @@ public:
 
             if (!monthById.has_value())
             {
-                std::cout << "Please provide a valid Month (January, Jan, 01 or 1)" << std::endl;
+                Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
                 return;
             }
 
@@ -45,7 +45,7 @@ public:
 
             if (!Okane::Regex::matchesYear(yearArg))
             {
-                std::cout << "Please provide a valid Year (2022 or 2023)" << std::endl;
+                Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
                 return;
             }
 
@@ -56,7 +56,7 @@ public:
 
         if (!monthEntry)
         {
-            std::cout << "You don't have any entry for " << month << '.' << year << std::endl;
+            Okane::Logging::printlnWarn("You don't have any entry for " + month + '.' + year + ".");
             return;
         }
 

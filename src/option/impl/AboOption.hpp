@@ -1,7 +1,5 @@
 #pragma once
 
-#include "rang.hpp"
-
 #include "../Option.hpp"
 #include "../../entry/Entry.hpp"
 #include "../../config/Config.hpp"
@@ -33,13 +31,13 @@ public:
 
         if (args.size() < 2)
         {
-            std::cout << "Please provide at least an amount and tag";
+            Okane::Logging::printlnError("Please provide at least an amount and tag.");
             return;
         }
 
         if (!Okane::Regex::matchesAmount(args[0]) || !Okane::Regex::matchesTag(args[1]))
         {
-            std::cout << "Please provide a valid amount and tag";
+            Okane::Logging::printlnError("Please provide a valid amount and tag.");
             return;
         }
 
@@ -58,7 +56,7 @@ public:
                 interval = subscription.value();
             else if (!Okane::Time::getFormatDate(args[2], date))
             {
-                std::cout << "Please enter a valid interval or date";
+                Okane::Logging::printlnError("Please enter a valid interval or date.");
                 return;
             }
         }
@@ -69,7 +67,7 @@ public:
 
             if (!subscription.has_value())
             {
-                std::cout << "Please provide a valid interval value (0, monthly, month or 1, yearly, year)";
+                Okane::Logging::printlnError("Please provide a valid interval value. (0, monthly, month or 1, yearly, year)");
                 return;
             }
 
@@ -77,7 +75,7 @@ public:
 
             if (!Okane::Time::getFormatDate(args[3], date))
             {
-                std::cout << "Please enter a valid date (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)";
+                Okane::Logging::printlnError("Please enter a valid date. (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)");
                 return;
             }
         }
@@ -87,13 +85,13 @@ public:
 
         if (duplicate != Config::appConfig.abos.end())
         {
-            std::cout << "There is already a similar abo(" << tag << ", " << amount << ")";
+            Okane::Logging::printlnWarn("There is already a similar abo. (" + tag + ", " + Okane::String::toString(amount) + ")");
             return;
         }
 
         Config::appConfig.abos.push_back(Entry::make_abo(date, tag, amount, interval));
 
-        std::cout << "Successfully added abo!";
+        Okane::Logging::println("Successfully added abo!");
     }
 
 private:

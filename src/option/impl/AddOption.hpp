@@ -15,7 +15,7 @@ public:
     {
         if (args.size() <= 1)
         {
-            std::cout << "Please provide at least an amount and tag";
+            Okane::Logging::printlnError("Please provide at least an amount and tag.");
             return;
         }
 
@@ -28,13 +28,13 @@ public:
 
         if (!Okane::Regex::matchesAmount(args[0]))
         {
-            std::cout << "Please enter a valid amount number (100, -6.6 or 12.35)";
+            Okane::Logging::printlnError("Please enter a valid amount number. (100, -6.6 or 12.35)");
             return;
         }
 
         if (!Okane::Regex::matchesTag(args[1]))
         {
-            std::cout << "Please enter a valid tag";
+            Okane::Logging::printlnError("Please enter a valid tag.");
             return;
         }
 
@@ -47,7 +47,7 @@ public:
             std::string date;
             if (!Okane::Time::getFormatDate(args[2], date))
             {
-                std::cout << "Please enter a valid date (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)";
+                Okane::Logging::printlnError("Please enter a valid date. (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)");
                 return;
             }
 
@@ -60,7 +60,7 @@ public:
 
         if (day == "29" && month == "02" && !Okane::Time::isLeapYear(std::stol(year)))
         {
-            std::cout << "You've entered " << day << '.' << month << '.' << year << " Which is not a valid year (not a leap year)";
+            Okane::Logging::printlnError("You've entered " + day + '.' + month + '.' + year + " which is not a valid year. (not a leap year)");
             return;
         }
 
@@ -82,6 +82,6 @@ public:
 
         monthEntry->add(Entry::make_simple((day + "." + month + "." + year), tag, amount));
 
-        std::cout << "Successfully added Entry for " << day << '.' << month << '.' << year;
+        Okane::Logging::println("Successfully added entry!");
     }
 };

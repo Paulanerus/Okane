@@ -15,13 +15,13 @@ public:
     {
         if (args.size() < 1)
         {
-            std::cout << "Please provide at least an index";
+            Okane::Logging::printlnError("Please provide at least an index.");
             return;
         }
 
         if (!Okane::Regex::matchesIndex(args[0]))
         {
-            std::cout << "Please enter a valid index (0, 1 or 20)";
+            Okane::Logging::printlnError("Please enter a valid index. (0, 1 or 20)");
             return;
         }
 
@@ -36,7 +36,7 @@ public:
 
             if (!monthById.has_value())
             {
-                std::cout << "Please provide a valid Month (January, Jan, 01 or 1)" << std::endl;
+                Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
                 return;
             }
 
@@ -51,7 +51,7 @@ public:
 
             if (!Okane::Regex::matchesYear(yearArg))
             {
-                std::cout << "Please provide a valid Year (2022 or 2023)" << std::endl;
+                Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
                 return;
             }
 
@@ -62,20 +62,19 @@ public:
 
         if (!monthEntry)
         {
-            std::cout << "You don't have any entries for " << month << '.' << year;
+            Okane::Logging::printlnWarn("You don't have any entries for " + month + '.' + year + ".");
             return;
         }
 
         if (index >= 0 && index < monthEntry->entries.size() && monthEntry->entries[index]->getType() == EntryType::ABO)
         {
-            std::cout
-                << "The provided index belongs to an abo entry. Do want to completely delete the abo? (Y/n)" << std::endl;
+            Okane::Logging::printlnWarn("The provided index belongs to an abo entry. Do you want to completely delete the abo? (Y/n)");
 
             char input = std::getchar();
 
             if (ALLOWED_YES.find(input) == ALLOWED_YES.end())
             {
-                std::cout << "Aborted...";
+                Okane::Logging::println("Aborted...");
                 return;
             }
 
@@ -86,23 +85,23 @@ public:
 
             if (aboEntry == Config::appConfig.abos.end())
             {
-                std::cout << "Surprise! The entry isn't there anymore... (You should not see this)";
+                Okane::Logging::printlnError("Surprise! The entry isn't there anymore... (You should not see this)");
                 return;
             }
 
             Config::appConfig.abos.erase(aboEntry);
 
-            std::cout << "Successfully removed Abo";
+            Okane::Logging::println("Successfully removed abo!");
             return;
         }
 
         if (!monthEntry->erase(index))
         {
-            std::cout << "Your provided index (" << index << ") is greater than the amount of entries for " << month << '.' << year;
+            Okane::Logging::printlnError("Your provided index (" + std::to_string(index) + ") is greater than the amount of entries for " + month + '.' + year + ".");
             return;
         }
 
-        std::cout << "Successfully removed Entry";
+        Okane::Logging::println("Successfully removed entry!");
     }
 
 private:
