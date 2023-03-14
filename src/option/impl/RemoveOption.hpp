@@ -32,7 +32,7 @@ public:
 
         if (args.size() >= 2)
         {
-            auto monthById = Okane::Time::getMonthFromId(args[1]);
+            auto monthById = Okane::Time::getMonthFromId(Okane::String::toLower(args[1]));
 
             if (!monthById.has_value())
             {

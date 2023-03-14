@@ -19,18 +19,18 @@ namespace Okane
         const std::string DATE_FORMAT{"%d.%m.%Y"};
 
         const std::unordered_map<std::string, std::vector<std::string>> MONTH_MAP = {
-            {"01", {"January", "Jan", "1", "01"}},
-            {"02", {"February", "Feb", "2", "02"}},
-            {"03", {"March", "Mar", "3", "03"}},
-            {"04", {"April", "Apr", "4", "04"}},
-            {"05", {"May", "5", "05"}},
-            {"06", {"June", "Jun", "6", "06"}},
-            {"07", {"July", "Jul", "7", "07"}},
-            {"08", {"August", "Aug", "8", "08"}},
-            {"09", {"September", "Sep", "9", "09"}},
-            {"10", {"October", "Oct", "10", "10"}},
-            {"11", {"November", "Nov", "11", "11"}},
-            {"12", {"December", "Dec", "12", "12"}},
+            {"01", {"january", "jan", "1", "01"}},
+            {"02", {"february", "feb", "2", "02"}},
+            {"03", {"march", "mar", "3", "03"}},
+            {"04", {"april", "apr", "4", "04"}},
+            {"05", {"may", "5", "05"}},
+            {"06", {"june", "jun", "6", "06"}},
+            {"07", {"july", "jul", "7", "07"}},
+            {"08", {"august", "aug", "8", "08"}},
+            {"09", {"september", "sep", "9", "09"}},
+            {"10", {"october", "oct", "10", "10"}},
+            {"11", {"november", "nov", "11", "11"}},
+            {"12", {"december", "dec", "12", "12"}},
         };
 
         inline bool isLeapYear(long year)
