@@ -13,6 +13,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - uses: abel0b/setup-premake@v2.2
         with:
           version: "5.0.0-beta2"
