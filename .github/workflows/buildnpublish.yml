@@ -38,8 +38,6 @@ jobs:
       - name: Create Release with GH CLI
         shell: powershell
         run: |
-          $date = Get-Date -Format 'yyyy.MM.dd'
-          $env:VERSION = "$date"
-          echo "VERSION=$(Get-Date -Format 'yyyy.MM.dd')" >> $GITHUB_ENV
+          echo "VERSION=$(Get-Date -Format 'yyyy.M.d')" >> $GITHUB_ENV
           gh release create "$env:VERSION" --generate-notes
           gh release upload "$env:VERSION" bin/Release/Okane.exe
