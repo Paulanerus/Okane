@@ -33,10 +33,13 @@ jobs:
           msbuild /p:Configuration=Release
 
       - name: Create Release with GH CLI
+        shell: powershell
         run: |
+          $date = Get-Date -Format 'yyyy.MM.dd'
+          $env:VERSION = "$date"
           echo "VERSION=$(Get-Date -Format 'yyyy.MM.dd')" >> $GITHUB_ENV
-          gh release create $VERSION --generate-notes
-          gh release upload $VERSION bin/Release/Okane.exe
+          gh release create "$env:VERSION" --generate-notes
+          gh release upload "$env:VERSION" bin/Release/Okane.exe
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
