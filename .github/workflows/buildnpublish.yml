@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Install Premake5 via Winget
-        run: winget install Premake.Premake.5.Beta
+        run: C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_1.13.1711.0_x64__8wekyb3d8bbwe\Installers\winget.exe install Premake.Premake.5.Beta
 
       - name: Run Premake5 with VS2022
         run: premake5 vs2022
