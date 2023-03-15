@@ -35,8 +35,8 @@ jobs:
       - name: Create Release with GH CLI
         run: |
           echo "VERSION=$(Get-Date -Format 'yyyy.MM.dd')" >> $GITHUB_ENV
-          gh release create "$VERSION"
-          gh release upload "$VERSION" ./bin/Release/Okane.exe
+          gh release create $VERSION --generate-notes
+          gh release upload $VERSION bin/Release/Okane.exe
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
