@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -40,6 +43,3 @@ jobs:
           echo "VERSION=$(Get-Date -Format 'yyyy.MM.dd')" >> $GITHUB_ENV
           gh release create "$env:VERSION" --generate-notes
           gh release upload "$env:VERSION" bin/Release/Okane.exe
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
