@@ -23,6 +23,9 @@ jobs:
       - name: Run Premake5 with VS2022
         run: premake5 vs2022
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
       - name: Build Release with MSBuild
         run: |
           msbuild /p:Configuration=Release
