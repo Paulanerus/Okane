@@ -11,11 +11,11 @@ namespace Okane
 
         const std::regex MONTH_REGEX{"(0[1-9]|1[0-2]).csv"};
 
-        const std::regex ENTRY_REGEX{"\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+$"};
+        const std::regex ENTRY_REGEX{"\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9!@#$%^&*()_+{}|:\"\'<>?~ \\-]+;[-+]?\\d*\\.?\\d+$"};
 
         const std::regex AMOUNT_REGEX{"[-+]?\\d*\\.?\\d{0,2}$"};
 
-        const std::regex TAG_REGEX{"[a-zA-Z0-9]+$"};
+        const std::regex TAG_REGEX{"^[a-zA-Z0-9!@#$%^&*()_+{}|:\"\'<>?~ \\-]+$"};
 
         const std::regex DATE_REGEX{"^\\d{1,2}\\.\\d{1,2}\\.\\d+$"};
 
@@ -23,11 +23,11 @@ namespace Okane
 
         const std::regex INDEX_REGEX{"^[0-9]+$"};
 
-        const std::regex ABO_REGEX{"^\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9]*;[-+]?\\d*\\.?\\d+;[01]$"};
+        const std::regex ABO_REGEX{"^\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9!@#$%^&*()_+{}|:\"\'<>?~ \\-]+;[-+]?\\d*\\.?\\d+;[01]$"};
 
         const std::regex STYLE_REGEX{"\033\\[[0-9]+m"};
 
-        inline std::string replace(const std::string &str, const std::regex &rgx, const std::string& replace)
+        inline std::string replace(const std::string &str, const std::regex &rgx, const std::string &replace)
         {
             return std::regex_replace(str, rgx, replace);
         }
