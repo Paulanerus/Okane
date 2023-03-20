@@ -35,11 +35,6 @@ PayInterval AboEntry::getInterval() const
     return m_Interval;
 }
 
-void AboEntry::setAmount(double amount)
-{
-    this->m_Amount = amount;
-}
-
 shared_simple Entry::fromString(const std::string &line)
 {
     auto parts = Okane::String::splitStr(line, ';');
@@ -62,9 +57,7 @@ void MonthEntry::add(const shared_simple &entry)
 bool MonthEntry::erase(const size_t index)
 {
     if (index >= entries.size() || index < 0)
-    {
         return false;
-    }
 
     entries.erase(entries.begin() + index);
 
@@ -77,7 +70,7 @@ double MonthEntry::getIncome() const
 
     for (const auto &entry : entries)
     {
-        if (entry->getAmount() > 0 && entry->getType() == EntryType::SIMPLE)
+        if (entry->getAmount() > 0)
             totalIncome += entry->getAmount();
     }
 
@@ -90,7 +83,7 @@ double MonthEntry::getAbos() const
 
     for (const auto &entry : entries)
     {
-        if (entry->getType() == EntryType::SIMPLE)
+        if (entry->getType() == EntryType::SIMPLE || entry->getAmount() >= 0)
             continue;
 
         auto abo = std::static_pointer_cast<AboEntry>(entry);

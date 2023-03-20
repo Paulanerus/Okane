@@ -48,8 +48,6 @@ public:
 
     PayInterval getInterval() const;
 
-    void setAmount(double amount);
-
 private:
     PayInterval m_Interval;
 };
