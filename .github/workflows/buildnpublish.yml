@@ -51,6 +51,11 @@ jobs:
       GH_TOKEN: ${{ github.token }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          
       - name: Package files
         run: |
           tar -czvf Source.tar.gz --exclude=.git --exclude=.github --exclude=.gitignore --exclude=.gitmodules ./src ./LICENSE.md ./premake5.lua ./README.md ./libs/rang/include/rang.hpp
