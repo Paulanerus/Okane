@@ -212,18 +212,12 @@ void Config::sortEntries()
 
 std::string Config::getDirectory()
 {
+    std::string osPath;
 #ifdef _WIN32
-    std::string osPath(std::getenv("APPDATA"));
-#endif
-
-#ifdef __unix__
-    std::string osPath(std::getenv("HOME"));
+    osPath = std::getenv("APPDATA");
+#elif __unix__
+    osPath = std::getenv("HOME");
     osPath += "/.config";
-#endif
-
-#ifdef __APPLE__
-    // TODO
-    std::string osPath(std::getenv("HOME"));
 #endif
 
     return osPath + "/Okane";
