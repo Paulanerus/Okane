@@ -200,12 +200,12 @@ void Config::sortEntries()
         {
             std::sort(month->entries.begin(), month->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
                       { 
-                    if(e1->getType() > e2->getType())
-                        return true;
-                    else if (e1->getType() < e2->getType())
-                        return false;
-
-                    return e1->getDate() < e2->getDate(); });
+                    if(e1->getType() != e2->getType())
+                        return e1->getType() > e2->getType();
+                    else if (e1->getDate() != e2->getDate())
+                        return e1->getDate() < e2->getDate();
+                    else
+                        return e1->getAmount() > e2->getAmount(); });
         }
     }
 }
