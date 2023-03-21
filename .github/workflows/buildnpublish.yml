@@ -59,6 +59,6 @@ jobs:
 
       - name: Package files
         run: |
-          $date = date +'%Y.%-m.%-d'
+          echo "cdate=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           tar -czvf Source.tar.gz --exclude=.git --exclude=.github --exclude=.gitignore --exclude=.gitmodules ./src ./LICENSE.md ./premake5.lua ./README.md ./libs/rang/include/rang.hpp
-          gh release upload $date Source.tar.gz
+          gh release upload $cdate Source.tar.gz
