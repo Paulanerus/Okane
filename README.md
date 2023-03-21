@@ -40,9 +40,20 @@ make config=release
 
 # Features
 
-todo: insert feature showcase here
+- Add any income or expense with a corresponding tag
+- Add repeating payments
+- Display a small or detailed view of your financial status
 
-type `okane help` for more informations.
+Status view:
+![status](images/status.png)
+
+Detailed view:
+![detailed](images/detailed.png)
+
+Abo view:
+![abo](images/abo.png)
+
+Type `okane help` for more informations.
 
 **Planned**
 
