@@ -7,8 +7,6 @@ namespace Okane
 {
     namespace Regex
     {
-        const std::regex YEAR_REGEX{"[0-9]+"};
-
         const std::regex MONTH_REGEX{"(0[1-9]|1[0-2]).csv"};
 
         const std::regex ENTRY_REGEX{"\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9!@#$%^&*()_+{}|:\"\'<>?~ \\-]+;[-+]?\\d*\\.?\\d+$"};
@@ -21,7 +19,7 @@ namespace Okane
 
         const std::regex DAY_REGEX{"^(0?[1-9]|[1-2][0-9]|3[0-1])$"};
 
-        const std::regex INDEX_REGEX{"^[0-9]+$"};
+        const std::regex PNUMBER_REGEX{"^[0-9]+$"};
 
         const std::regex ABO_REGEX{"^\\d{2}.\\d{2}.\\d{4};[a-zA-Z0-9!@#$%^&*()_+{}|:\"\'<>?~ \\-]+;[-+]?\\d*\\.?\\d+;[01]$"};
 
@@ -30,11 +28,6 @@ namespace Okane
         inline std::string replace(const std::string &str, const std::regex &rgx, const std::string &replace)
         {
             return std::regex_replace(str, rgx, replace);
-        }
-
-        inline bool matchesYear(const std::string &toMatch)
-        {
-            return std::regex_match(toMatch, YEAR_REGEX);
         }
 
         inline bool matchesMonth(const std::string &toMatch)
@@ -67,9 +60,9 @@ namespace Okane
             return std::regex_match(toMatch, DAY_REGEX);
         }
 
-        inline bool matchesIndex(const std::string &toMatch)
+        inline bool matchesPNumber(const std::string &toMatch)
         {
-            return std::regex_match(toMatch, INDEX_REGEX);
+            return std::regex_match(toMatch, PNUMBER_REGEX);
         }
 
         inline bool matchesAbo(const std::string &toMatch)

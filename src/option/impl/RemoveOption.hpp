@@ -19,7 +19,7 @@ public:
             return;
         }
 
-        if (!Okane::Regex::matchesIndex(args[0]))
+        if (!Okane::Regex::matchesPNumber(args[0]))
         {
             Okane::Logging::printlnError("Please enter a valid index. (0, 1 or 20)");
             return;
@@ -49,7 +49,7 @@ public:
 
             auto yearArg = args[2];
 
-            if (!Okane::Regex::matchesYear(yearArg))
+            if (!Okane::Regex::matchesPNumber(yearArg))
             {
                 Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
                 return;

@@ -39,7 +39,7 @@ public:
         }
 
         amount = std::stod(args[0]);
-        tag = args.at(1);
+        tag = args[1];
 
         if (args.size() > 2)
         {

@@ -21,11 +21,11 @@ void TableView::print()
 
     printRowLine();
 
-    for (size_t i = 0; i < m_Rows.size(); i++)
+    for (size_t i{}; i < m_Rows.size(); i++)
     {
         std::cout << m_Border << ' ';
 
-        for (size_t j = 0; j < m_MaxRowSize; j++)
+        for (size_t j{}; j < m_MaxRowSize; j++)
         {
             auto entry = m_Rows[i][j];
 
@@ -58,7 +58,7 @@ inline size_t TableView::getWidth(const std::string &str)
 {
     size_t width{};
 
-    for (size_t i = 0; i < str.length(); i += std::mblen(&str[i], str.length() - i))
+    for (size_t i{}; i < str.length(); i += std::mblen(&str[i], str.length() - i))
         width++;
 
     return width;
@@ -71,10 +71,10 @@ inline size_t TableView::getPadding(const std::string &entry, size_t columnIndex
 
 void TableView::collectColumnLongest()
 {
-    for (size_t i = 0; i < m_MaxRowSize; i++)
+    for (size_t i{}; i < m_MaxRowSize; i++)
     {
         size_t longest{};
-        for (size_t j = 0; j < m_Rows.size(); j++)
+        for (size_t j{}; j < m_Rows.size(); j++)
         {
             auto noColorRgx = Okane::Regex::replace(m_Rows[j][i], Okane::Regex::STYLE_REGEX, "");
 

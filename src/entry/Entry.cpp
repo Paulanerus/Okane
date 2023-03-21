@@ -5,41 +5,6 @@
 
 #include <sstream>
 
-std::string SimpleEntry::getDate() const
-{
-    return m_Date;
-}
-
-std::string SimpleEntry::getTag() const
-{
-    return m_Tag;
-}
-
-double SimpleEntry::getAmount() const
-{
-    return m_Amount;
-}
-
-EntryType SimpleEntry::getType() const
-{
-    return EntryType::SIMPLE;
-}
-
-EntryType AboEntry::getType() const
-{
-    return EntryType::ABO;
-}
-
-PayInterval AboEntry::getInterval() const
-{
-    return m_Interval;
-}
-
-void AboEntry::setAmount(double amount)
-{
-    this->m_Amount = amount;
-}
-
 shared_simple Entry::fromString(const std::string &line)
 {
     auto parts = Okane::String::splitStr(line, ';');
@@ -52,76 +17,6 @@ shared_abo Entry::fromStringAbo(const std::string &line)
     auto parts = Okane::String::splitStr(line, ';');
 
     return Entry::make_abo(parts[0], parts[1], std::stod(parts[2]), parts[3] == "1" ? PayInterval::YEARLY : PayInterval::MONTHLY);
-}
-
-void MonthEntry::add(const shared_simple &entry)
-{
-    entries.push_back(entry);
-}
-
-bool MonthEntry::erase(const size_t index)
-{
-    if (index >= entries.size() || index < 0)
-    {
-        return false;
-    }
-
-    entries.erase(entries.begin() + index);
-
-    return true;
-}
-
-double MonthEntry::getIncome() const
-{
-    double totalIncome{};
-
-    for (const auto &entry : entries)
-    {
-        if (entry->getAmount() > 0 && entry->getType() == EntryType::SIMPLE)
-            totalIncome += entry->getAmount();
-    }
-
-    return totalIncome;
-}
-
-double MonthEntry::getAbos() const
-{
-    double totalAbos{};
-
-    for (const auto &entry : entries)
-    {
-        if (entry->getType() == EntryType::SIMPLE)
-            continue;
-
-        auto abo = std::static_pointer_cast<AboEntry>(entry);
-
-        totalAbos += abo->getAmount() / (abo->getInterval() == PayInterval::YEARLY ? 12 : 1);
-    }
-
-    return totalAbos;
-}
-
-double MonthEntry::getExpenses() const
-{
-    double totalExpenses{};
-
-    for (const auto &entry : entries)
-    {
-        if (entry->getAmount() < 0 && entry->getType() == EntryType::SIMPLE)
-            totalExpenses += entry->getAmount();
-    }
-
-    return totalExpenses;
-}
-
-double MonthEntry::getBalance() const
-{
-    return getIncome() + getExpenses() + getAbos();
-}
-
-void YearEntry::add(const shared_month &month)
-{
-    months.push_back(month);
 }
 
 shared_simple Entry::make_simple(std::string date, std::string tag, double amount)

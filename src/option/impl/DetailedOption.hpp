@@ -43,7 +43,7 @@ public:
 
             auto yearArg = args[1];
 
-            if (!Okane::Regex::matchesYear(yearArg))
+            if (!Okane::Regex::matchesPNumber(yearArg))
             {
                 Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
                 return;
@@ -63,7 +63,7 @@ public:
         auto table = std::make_unique<TableView>();
         table->addRow({"Index", "Date", "Tag", "Amount"});
 
-        for (size_t i = 0; i < monthEntry->entries.size(); i++)
+        for (size_t i{}; i < monthEntry->entries.size(); i++)
         {
             auto amount = monthEntry->entries[i]->getAmount();
 

@@ -46,7 +46,7 @@ public:
 
             auto yearArg = args[1];
 
-            if (!Okane::Regex::matchesYear(yearArg))
+            if (!Okane::Regex::matchesPNumber(yearArg))
             {
                 Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
                 return;

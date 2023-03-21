@@ -104,7 +104,7 @@ void Config::loadEntries()
     {
         auto entryName = entry.path().filename().string();
 
-        if (!entry.is_directory() || !Okane::Regex::matchesYear(entryName))
+        if (!entry.is_directory() || !Okane::Regex::matchesPNumber(entryName))
             continue;
 
         auto year = Entry::make_year(entryName);
@@ -200,30 +200,24 @@ void Config::sortEntries()
         {
             std::sort(month->entries.begin(), month->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
                       { 
-                    if(e1->getType() > e2->getType())
-                        return true;
-                    else if (e1->getType() < e2->getType())
-                        return false;
-
-                    return e1->getDate() < e2->getDate(); });
+                    if(e1->getType() != e2->getType())
+                        return e1->getType() > e2->getType();
+                    else if (e1->getDate() != e2->getDate())
+                        return e1->getDate() < e2->getDate();
+                    else
+                        return e1->getAmount() > e2->getAmount(); });
         }
     }
 }
 
 std::string Config::getDirectory()
 {
+    std::string osPath;
 #ifdef _WIN32
-    std::string osPath(std::getenv("APPDATA"));
-#endif
-
-#ifdef __unix__
-    std::string osPath(std::getenv("HOME"));
+    osPath = std::getenv("APPDATA");
+#elif __unix__
+    osPath = std::getenv("HOME");
     osPath += "/.config";
-#endif
-
-#ifdef __APPLE__
-    // TODO
-    std::string osPath(std::getenv("HOME"));
 #endif
 
     return osPath + "/Okane";
