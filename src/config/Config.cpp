@@ -104,7 +104,7 @@ void Config::loadEntries()
     {
         auto entryName = entry.path().filename().string();
 
-        if (!entry.is_directory() || !Okane::Regex::matchesYear(entryName))
+        if (!entry.is_directory() || !Okane::Regex::matchesPNumber(entryName))
             continue;
 
         auto year = Entry::make_year(entryName);

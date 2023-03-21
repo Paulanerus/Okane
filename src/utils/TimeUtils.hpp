@@ -56,7 +56,7 @@ namespace Okane
 
             const auto dateSplit = Okane::String::splitStr(date, '.');
 
-            if (!Okane::Regex::matchesDay(dateSplit[0]) || !getMonthFromId(dateSplit[1]).has_value() || !Okane::Regex::matchesYear(dateSplit[2]))
+            if (!Okane::Regex::matchesDay(dateSplit[0]) || !getMonthFromId(dateSplit[1]).has_value() || !Okane::Regex::matchesPNumber(dateSplit[2]))
                 return false;
 
             std::stringstream formatDate;
