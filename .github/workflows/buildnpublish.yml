@@ -43,3 +43,15 @@ jobs:
           echo "VERSION=$(Get-Date -Format 'yyyy.M.d')" >> $GITHUB_ENV
           gh release create "$env:VERSION" --generate-notes
           gh release upload "$env:VERSION" bin/Release/Okane.exe
+
+  source:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Package files
+        run: |
+          tar -czvf Source.tar.gz --exclude=.git --exclude=.github --exclude=.gitignore --exclude=.gitmodules ./src ./LICENSE.md ./premake5.lua ./README.md ./libs/rang/include/rang.hpp
+          gh release upload $env:VERSION Source.tar.gz
