@@ -45,7 +45,7 @@ jobs:
           gh release upload "$env:VERSION" bin/Release/Okane.exe
 
   source:
-    need: build
+    needs: build
     runs-on: ubuntu-latest
 
     env:
