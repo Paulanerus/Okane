@@ -90,7 +90,7 @@ void Config::saveEntries()
                 if (entry->getType() == EntryType::ABO)
                     continue;
 
-                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << std::fixed << std::setprecision(2) << entry->getAmount() << '\n';
+                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << Okane::String::toString(entry->getAmount()) << '\n';
             }
         }
     }
@@ -189,7 +189,7 @@ void Config::saveAbos()
         return;
 
     for (const auto &abo : appConfig.abos)
-        aboFile << abo->getDate() << ';' << abo->getTag() << ';' << std::fixed << std::setprecision(2) << abo->getAmount() << ";" << abo->getInterval() << '\n';
+        aboFile << abo->getDate() << ';' << abo->getTag() << ';' << Okane::String::toString(abo->getAmount()) << ";" << abo->getInterval() << '\n';
 }
 
 void Config::sortEntries()
