@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Option.hpp"
-#include "../../utils/StringUtils.hpp"
+#include "../../utils/Logger.hpp"
 #include "rang.hpp"
 
 #include <iostream>
