@@ -63,7 +63,7 @@ public:
         auto table = std::make_unique<TableView>();
         table->addRow({"Index", "Date", "Tag", "Amount"});
 
-        for (size_t i = 0; i < monthEntry->entries.size(); i++)
+        for (size_t i{}; i < monthEntry->entries.size(); i++)
         {
             auto amount = monthEntry->entries[i]->getAmount();
 
