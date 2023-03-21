@@ -52,6 +52,6 @@ Type `okane help` for more informations.
 
 **Planned**
 
-- Support more langauges
+- Support more languages
 - Password protection
 - Apple support
