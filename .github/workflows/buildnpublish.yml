@@ -47,6 +47,10 @@ jobs:
       - name: Download wingetcreate and publish to winget
         shell: powershell
         run: |
+          $date = Get-Date -Format 'yyyy.M.d'
+          $env:VERSION = "$date"
+          echo "VERSION=$(Get-Date -Format 'yyyy.M.d')" >> $GITHUB_ENV
+          
           $url = "https://github.com/Paulanerus/Okane/releases/download/$env:VERSION/Okane.exe"
 
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
