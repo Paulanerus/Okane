@@ -54,7 +54,7 @@ jobs:
           $url = "https://github.com/Paulanerus/Okane/releases/download/$env:VERSION/Okane.exe"
 
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          .\wingetcreate.exe update Paulanerus.Okane -s -v "$env:VERSION" -u $url -t ${{ secrets.OKANE_WINGET }}
+          .\wingetcreate.exe update Paulanerus.Okane -s -v "$env:VERSION" -u $url -t "${{ secrets.OKANE_WINGET }}""
 
   source:
     needs: build
