@@ -43,18 +43,20 @@ jobs:
           echo "VERSION=$(Get-Date -Format 'yyyy.M.d')" >> $GITHUB_ENV
           gh release create "$env:VERSION" --generate-notes
           gh release upload "$env:VERSION" bin/Release/Okane.exe
-      
+
       - name: Download wingetcreate and publish to winget
         shell: powershell
         run: |
           $date = Get-Date -Format 'yyyy.M.d'
           $env:VERSION = "$date"
           echo "VERSION=$(Get-Date -Format 'yyyy.M.d')" >> $GITHUB_ENV
-          
+
+          $token = "${{ secrets.OKANE_WINGET }}" 
+
           $url = "https://github.com/Paulanerus/Okane/releases/download/$env:VERSION/Okane.exe"
 
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
-          .\wingetcreate.exe update Paulanerus.Okane -s -v "$env:VERSION" -u $url -t ${{ github.token }}
+          .\wingetcreate.exe update Paulanerus.Okane -s -v "$env:VERSION" -u $url -t $token
 
   source:
     needs: build
