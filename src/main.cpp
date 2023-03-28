@@ -3,6 +3,7 @@
 #include "config/Config.hpp"
 #include "option/Option.hpp"
 #include "utils/StringUtils.hpp"
+#include "utils/Logger.hpp"
 
 #include <clocale>
 #include <iostream>
@@ -27,19 +28,16 @@ int main(int argc, char **args)
     auto config = std::make_unique<Config>();
 
     std::string firstArg{args[1]};
-    Okane::String::toLower(firstArg);
-
-    auto option = Option::find(firstArg);
+    auto option = Option::find(Okane::String::toLower(firstArg));
 
     if (!option)
     {
-        std::cout << rang::fg::red << "Option not found try 'okane help' for more informations" << rang::style::reset << std::endl;
+        Okane::Logging::printlnError("\nOption not found try 'okane help' for more informations\n");
         return EXIT_SUCCESS;
     }
 
-    std::vector<std::string> restOfArgs = Option::copyAfter(argc, args);
     std::cout << std::endl;
-    option->execute(restOfArgs);
+    option->execute(Option::copyAfter(argc, args));
     std::cout << std::endl;
 
     return EXIT_SUCCESS;
