@@ -8,21 +8,25 @@
 #include "impl/RemoveOption.hpp"
 #include "impl/AboOption.hpp"
 
-const std::unordered_map<std::string, std::shared_ptr<Option>> Option::m_Args = {
-    {"help", std::make_shared<HelpOption>()},
-    {"detailed", std::make_shared<DetailedOption>()},
-    {"status", std::make_shared<StatusOption>()},
-    {"add", std::make_shared<AddOption>()},
-    {"currency", std::make_shared<CurrencyOption>()},
-    {"remove", std::make_shared<RemoveOption>()},
-    {"abo", std::make_shared<AboOption>()},
+const std::unordered_map<std::unordered_set<std::string>, std::shared_ptr<Option>, Option::HashUSet> Option::m_Args = {
+    {{"help", "h"}, std::make_shared<HelpOption>()},
+    {{"detailed", "det", "d"}, std::make_shared<DetailedOption>()},
+    {{"status", "stat", "s"}, std::make_shared<StatusOption>()},
+    {{"add", "a"}, std::make_shared<AddOption>()},
+    {{"currency", "c"}, std::make_shared<CurrencyOption>()},
+    {{"remove", "rem", "r"}, std::make_shared<RemoveOption>()},
+    {{"abo"}, std::make_shared<AboOption>()},
 };
 
 std::shared_ptr<Option> Option::find(const std::string &arg)
 {
-    auto iter = m_Args.find(arg);
+    for (const auto &[keys, val] : m_Args)
+    {
+        if (keys.find(arg) != keys.end())
+            return val;
+    }
 
-    return iter == m_Args.end() ? nullptr : iter->second;
+    return nullptr;
 }
 
 std::vector<std::string> Option::copyAfter(int argc, char **args)
