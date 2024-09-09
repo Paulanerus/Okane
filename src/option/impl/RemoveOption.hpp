@@ -72,7 +72,7 @@ public:
         {
             std::cout << rang::fgB::yellow << "The provided index belongs to an abo entry. Do you want to completely delete the abo? (Y/n)" << rang::style::reset << std::endl;
 
-            char input = std::getchar();
+            char input = static_cast<char>(std::getchar());
 
             if (ALLOWED_YES.find(input) == ALLOWED_YES.end())
             {
