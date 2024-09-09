@@ -1,38 +1,65 @@
 #pragma once
 
-#include "AppConfig.hpp"
+#include "../entry/Entry.hpp"
+
+#include <string>
+#include <vector>
+
+struct AppConfig
+{
+    std::string currency;
+    std::vector<shared_year> years;
+    std::vector<shared_abo> abos;
+};
 
 class Config
 {
 public:
-    static AppConfig appConfig;
+    Config() : m_BaseDir(directory()), m_ConfigPath(m_BaseDir + "/okane.txt"), m_AboPath(m_BaseDir + "/abos.csv")
+    {
+        create_dir();
 
-    Config();
+        load_file();
+        load_entries();
+        load_abos();
 
-    ~Config();
+        sort_entries();
+    }
+
+    ~Config()
+    {
+        create_dir();
+
+        save_file();
+        save_entries();
+        save_abos();
+    }
+
+public:
+    inline static AppConfig s_AppConfig{"€", {}, {}};
 
 private:
-    std::string baseDir;
+    const std::string m_BaseDir;
 
-    std::string configPath;
+    const std::string m_ConfigPath;
 
-    std::string aboPath;
+    const std::string m_AboPath;
 
-    std::string getDirectory();
+    std::string directory();
 
-    void loadFile();
+    void load_file();
 
-    void saveFile();
+    void save_file();
 
-    void loadEntries();
+    void load_entries();
 
-    void saveEntries();
+    void save_entries();
 
-    void loadAbos();
+    void load_abos();
 
-    void saveAbos();
+    void save_abos();
 
-    void sortEntries();
+    void sort_entries();
 
-    void checkAndCreateDir();
+    void create_dir();
 };

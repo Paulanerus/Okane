@@ -2,85 +2,57 @@
 
 #include "rang.hpp"
 
-#include "../utils/RegexUtils.hpp"
-#include "../utils/StringUtils.hpp"
+#include "../utils/regex.hpp"
+#include "../utils/strings.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 
-AppConfig Config::appConfig;
-
-namespace fs = std::filesystem;
-
-Config::Config()
+void Config::create_dir()
 {
-    baseDir = getDirectory();
-    configPath = baseDir + "/okane.txt";
-    aboPath = baseDir + "/abos.csv";
-
-    checkAndCreateDir();
-
-    loadFile();
-    loadEntries();
-    loadAbos();
-
-    sortEntries();
+    if (!std::filesystem::exists(m_BaseDir))
+        std::filesystem::create_directories(m_BaseDir);
 }
 
-Config::~Config()
+void Config::load_file()
 {
-    checkAndCreateDir();
-
-    saveFile();
-    saveEntries();
-    saveAbos();
-}
-
-void Config::checkAndCreateDir()
-{
-    if (!fs::exists(baseDir))
-        fs::create_directories(baseDir);
-}
-
-void Config::loadFile()
-{
-    if (!fs::exists(configPath) || fs::is_empty(configPath))
+    if (!std::filesystem::exists(m_ConfigPath) || std::filesystem::is_empty(m_ConfigPath))
         return;
 
-    std::ifstream configFile;
-    configFile.open(configPath);
+    std::ifstream config_file;
+    config_file.open(m_ConfigPath);
 
-    if (!configFile.is_open())
+    if (!config_file.is_open())
         return;
 
-    configFile >> appConfig.currency;
+    config_file >> s_AppConfig.currency;
 }
 
-void Config::saveFile()
+void Config::save_file()
 {
-    std::ofstream configFile;
-    configFile.open(configPath);
+    std::ofstream config_file;
+    config_file.open(m_ConfigPath);
 
-    if (!configFile.is_open())
+    if (!config_file.is_open())
         return;
 
-    configFile << appConfig.currency;
+    config_file << s_AppConfig.currency;
 }
 
-void Config::saveEntries()
+void Config::save_entries()
 {
-    for (const auto &year : appConfig.years)
+    for (const auto &year : s_AppConfig.years)
     {
-        auto yearDir = baseDir + "/" + year->yearNr;
+        auto year_dir = m_BaseDir + "/" + year->yearNr;
 
-        if (!fs::exists(yearDir))
-            fs::create_directory(yearDir);
+        if (!std::filesystem::exists(year_dir))
+            std::filesystem::create_directory(year_dir);
 
         for (const auto &month : year->months)
         {
             std::ofstream monthFile;
-            monthFile.open(yearDir + "/" + month->monthNr + ".csv");
+            monthFile.open(year_dir + "/" + month->monthNr + ".csv");
 
             if (!monthFile.is_open())
                 continue;
@@ -90,111 +62,111 @@ void Config::saveEntries()
                 if (entry->getType() == EntryType::ABO)
                     continue;
 
-                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << Okane::String::toString(entry->getAmount()) << '\n';
+                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << okane::strings::to_string(entry->getAmount()) << '\n';
             }
         }
     }
 }
 
-void Config::loadEntries()
+void Config::load_entries()
 {
-    fs::directory_iterator baseDirIter(baseDir);
+    std::filesystem::directory_iterator base_dir_iter(m_BaseDir);
 
-    for (const auto &entry : baseDirIter)
+    for (const auto &entry : base_dir_iter)
     {
-        auto entryName = entry.path().filename().string();
+        auto entry_name = entry.path().filename().string();
 
-        if (!entry.is_directory() || !Okane::Regex::matchesPNumber(entryName))
+        if (!entry.is_directory() || !okane::rgx::matches_pnumber(entry_name))
             continue;
 
-        auto year = Entry::make_year(entryName);
+        auto year = Entry::make_year(entry_name);
 
-        fs::directory_iterator yearIter(baseDir + "/" + entryName);
+        std::filesystem::directory_iterator year_iter(m_BaseDir + "/" + entry_name);
 
-        for (const auto &month : yearIter)
+        for (const auto &month : year_iter)
         {
-            auto monthEntryName = month.path().filename().string();
+            auto month_entry_name = month.path().filename().string();
 
-            if (!month.is_regular_file() || !Okane::Regex::matchesMonth(monthEntryName))
+            if (!month.is_regular_file() || !okane::rgx::matches_month(month_entry_name))
                 continue;
 
-            std::ifstream monthFile;
-            monthFile.open(baseDir + "/" + entryName + "/" + monthEntryName);
+            std::ifstream month_file;
+            month_file.open(m_BaseDir + "/" + entry_name + "/" + month_entry_name);
 
-            if (!monthFile.is_open())
+            if (!month_file.is_open())
                 continue;
 
-            auto monthEntry = Entry::make_month(monthEntryName.substr(0, monthEntryName.size() - 4));
+            auto month_entry = Entry::make_month(month_entry_name.substr(0, month_entry_name.size() - 4));
 
             std::string line;
-            while (std::getline(monthFile, line))
+            while (std::getline(month_file, line))
             {
-                if (!Okane::Regex::matchesEntry(line))
+                if (!okane::rgx::matches_entry(line))
                     continue;
 
-                monthEntry->add(Entry::fromString(line));
+                month_entry->add(Entry::fromString(line));
             }
 
-            year->add(monthEntry);
+            year->add(month_entry);
         }
 
-        appConfig.years.push_back(year);
+        s_AppConfig.years.push_back(year);
     }
 }
 
-void Config::loadAbos()
+void Config::load_abos()
 {
-    if (!fs::exists(aboPath) || fs::is_empty(aboPath))
+    if (!std::filesystem::exists(m_AboPath) || std::filesystem::is_empty(m_AboPath))
         return;
 
-    std::ifstream aboFile{aboPath};
+    std::ifstream abo_file{m_AboPath};
 
-    if (!aboFile.is_open())
+    if (!abo_file.is_open())
         return;
 
     std::string line;
-    while (std::getline(aboFile, line))
+    while (std::getline(abo_file, line))
     {
-        if (!Okane::Regex::matchesAbo(line))
+        if (!okane::rgx::matches_abo(line))
             continue;
 
-        auto aboFromStr = Entry::fromStringAbo(line);
+        auto abo_from_str = Entry::fromStringAbo(line);
 
-        auto aboDate = Okane::String::splitStr(aboFromStr->getDate(), '.');
+        auto abo_date = okane::strings::split_str(abo_from_str->getDate(), '.');
 
-        for (const auto &year : appConfig.years)
+        for (const auto &year : s_AppConfig.years)
         {
-            if (year->yearNr < aboDate[2])
+            if (year->yearNr < abo_date[2])
                 continue;
 
             for (const auto &month : year->months)
             {
-                if (month->monthNr < aboDate[1])
+                if (month->monthNr < abo_date[1])
                     continue;
 
-                month->add(aboFromStr);
+                month->add(abo_from_str);
             }
         }
 
-        appConfig.abos.push_back(aboFromStr);
+        s_AppConfig.abos.push_back(abo_from_str);
     }
 }
 
-void Config::saveAbos()
+void Config::save_abos()
 {
-    std::ofstream aboFile;
-    aboFile.open(aboPath);
+    std::ofstream abo_file;
+    abo_file.open(m_AboPath);
 
-    if (!aboFile.is_open())
+    if (!abo_file.is_open())
         return;
 
-    for (const auto &abo : appConfig.abos)
-        aboFile << abo->getDate() << ';' << abo->getTag() << ';' << Okane::String::toString(abo->getAmount()) << ";" << abo->getInterval() << '\n';
+    for (const auto &abo : s_AppConfig.abos)
+        abo_file << abo->getDate() << ';' << abo->getTag() << ';' << okane::strings::to_string(abo->getAmount()) << ";" << abo->getInterval() << '\n';
 }
 
-void Config::sortEntries()
+void Config::sort_entries()
 {
-    for (const auto &year : appConfig.years)
+    for (const auto &year : s_AppConfig.years)
     {
         for (const auto &month : year->months)
         {
@@ -210,15 +182,15 @@ void Config::sortEntries()
     }
 }
 
-std::string Config::getDirectory()
+std::string Config::directory()
 {
-    std::string osPath;
+    std::string os_path;
 #ifdef _WIN32
-    osPath = std::getenv("APPDATA");
+    os_path = std::getenv("APPDATA");
 #elif __unix__
-    osPath = std::getenv("HOME");
-    osPath += "/.config";
+    os_path = std::getenv("HOME");
+    os_path += "/.config";
 #endif
 
-    return osPath + "/Okane";
+    return os_path + "/Okane";
 }
