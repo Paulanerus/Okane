@@ -1,5 +1,10 @@
 #include "Config.hpp"
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
+
 #include "rang.hpp"
 
 #include "../utils/regex.hpp"
@@ -194,3 +199,7 @@ std::string Config::directory()
 
     return os_path + "/Okane";
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
