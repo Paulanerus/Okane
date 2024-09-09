@@ -12,8 +12,13 @@
 #endif
 int main(int argc, char **args)
 {
+    rang::setControlMode(rang::control::Force);
+
     if (argc <= 1)
+    {
+        std::cout << "Try '" << rang::fgB::blue << "okane help" << rang::style::reset << "' for more information" << std::endl;
         return EXIT_SUCCESS;
+    }
 
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
@@ -22,8 +27,6 @@ int main(int argc, char **args)
     setlocale(LC_CTYPE, "en_US.utf8");
 #endif
 
-    rang::setControlMode(rang::control::Force);
-
     auto config = std::make_unique<Config>();
 
     std::string firstArg{args[1]};
@@ -31,7 +34,7 @@ int main(int argc, char **args)
 
     if (!option)
     {
-        std::cout << rang::fgB::red << "\nOption not found try 'okane help' for more informations\n"
+        std::cout << rang::fgB::red << "\nOption not found try 'okane help' for more information\n"
                   << rang::style::reset << std::endl;
         return EXIT_SUCCESS;
     }
