@@ -1,35 +1,31 @@
 #include "TableView.hpp"
 
-#include "../utils/RegexUtils.hpp"
+#include "../utils/regex.hpp"
 
 #include <iostream>
 #include <numeric>
 #include <iomanip>
-
-TableView::TableView(char row, char border, char corner) : m_Row(row), m_Border(border), m_Corner(corner)
-{
-}
 
 void TableView::print()
 {
     for (auto &row : m_Rows)
         row.resize(m_MaxRowSize, " ");
 
-    collectColumnLongest();
+    collect_column_longest();
 
-    setMaxRowLength();
+    set_max_row_length();
 
-    printRowLine();
+    print_row_line();
 
-    for (size_t i{}; i < m_Rows.size(); i++)
+    for (std::size_t i{}; i < m_Rows.size(); i++)
     {
         std::cout << m_Border << ' ';
 
-        for (size_t j{}; j < m_MaxRowSize; j++)
+        for (std::size_t j{}; j < m_MaxRowSize; j++)
         {
             auto entry = m_Rows[i][j];
 
-            std::cout << entry << std::setw(getPadding(entry, j));
+            std::cout << entry << std::setw(padding(entry, j));
 
             if (j != m_MaxRowLength - 1)
                 std::cout << ' ' << m_Border << ' ';
@@ -38,10 +34,10 @@ void TableView::print()
         std::cout << '\n';
     }
 
-    printRowLine();
+    print_row_line();
 }
 
-void TableView::addRow(const std::vector<std::string> &row)
+void TableView::add_row(const std::vector<std::string> &row)
 {
     if (row.size() > m_MaxRowSize)
         m_MaxRowSize = row.size();
@@ -51,42 +47,42 @@ void TableView::addRow(const std::vector<std::string> &row)
 
 void TableView::operator<<(const std::string &row)
 {
-    addRow({row});
+    add_row({row});
 }
 
-inline size_t TableView::getWidth(const std::string &str)
+inline std::size_t TableView::width(const std::string &str) const noexcept
 {
-    size_t width{};
+    std::size_t width{};
 
-    for (size_t i{}; i < str.length(); i += std::mblen(&str[i], str.length() - i))
+    for (std::size_t i{}; i < str.length(); i += std::mblen(&str[i], str.length() - i))
         width++;
 
     return width;
 }
 
-inline size_t TableView::getPadding(const std::string &entry, size_t columnIndex)
+inline std::size_t TableView::padding(const std::string &entry, std::size_t column_idx) const
 {
-    return (m_LongestOfEachRow[columnIndex] - getWidth(Okane::Regex::replace(entry, Okane::Regex::STYLE_REGEX, ""))) + 1;
+    return (m_LongestOfEachRow[column_idx] - width(okane::rgx::replace(entry, okane::rgx::STYLE_REGEX, ""))) + 1;
 }
 
-void TableView::collectColumnLongest()
+inline void TableView::collect_column_longest()
 {
-    for (size_t i{}; i < m_MaxRowSize; i++)
+    for (std::size_t i{}; i < m_MaxRowSize; i++)
     {
-        size_t longest{};
-        for (size_t j{}; j < m_Rows.size(); j++)
+        std::size_t longest{};
+        for (std::size_t j{}; j < m_Rows.size(); j++)
         {
-            auto noColorRgx = Okane::Regex::replace(m_Rows[j][i], Okane::Regex::STYLE_REGEX, "");
+            auto no_color_rgx = okane::rgx::replace(m_Rows[j][i], okane::rgx::STYLE_REGEX, "");
 
-            if (noColorRgx.size() > longest)
-                longest = noColorRgx.size();
+            if (no_color_rgx.size() > longest)
+                longest = no_color_rgx.size();
         }
 
         m_LongestOfEachRow.push_back(longest);
     }
 }
 
-inline void TableView::setMaxRowLength()
+inline void TableView::set_max_row_length() noexcept
 {
     m_MaxRowLength = 3 * m_MaxRowSize - 1;
 
@@ -94,7 +90,7 @@ inline void TableView::setMaxRowLength()
         m_MaxRowLength += row;
 }
 
-inline void TableView::printRowLine()
+inline void TableView::print_row_line() const noexcept
 {
     std::cout << m_Corner << std::string(m_MaxRowLength, m_Row) << m_Corner << std::endl;
 }
