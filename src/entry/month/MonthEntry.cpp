@@ -7,7 +7,7 @@ void MonthEntry::add(const shared_simple &entry)
     entries.push_back(entry);
 }
 
-bool MonthEntry::erase(const size_t index)
+bool MonthEntry::erase(std::size_t index)
 {
     if (index >= entries.size())
         return false;
@@ -17,50 +17,47 @@ bool MonthEntry::erase(const size_t index)
     return true;
 }
 
-double MonthEntry::getIncome() const
+double MonthEntry::income() const noexcept
 {
-    double totalIncome{};
-
-    for (const auto &entry : entries)
+    double total_income{};
+    for (auto &entry : entries)
     {
-        if (entry->getAmount() > 0)
-            totalIncome += entry->getAmount();
+        if (entry->amount() > 0)
+            total_income += entry->amount();
     }
 
-    return totalIncome;
+    return total_income;
 }
 
-double MonthEntry::getAbos() const
+double MonthEntry::abos() const noexcept
 {
-    double totalAbos{};
-
-    for (const auto &entry : entries)
+    double total_abos{};
+    for (auto &entry : entries)
     {
-        if (entry->getType() == EntryType::SIMPLE || entry->getAmount() >= 0)
+        if (entry->type() == EntryType::SIMPLE || entry->amount() >= 0)
             continue;
 
         auto abo = std::static_pointer_cast<AboEntry>(entry);
 
-        totalAbos += abo->getAmount() / (abo->getInterval() == PayInterval::YEARLY ? 12 : 1);
+        total_abos += abo->amount() / (abo->getInterval() == PayInterval::YEARLY ? 12 : 1);
     }
 
-    return totalAbos;
+    return total_abos;
 }
 
-double MonthEntry::getExpenses() const
+double MonthEntry::expenses() const noexcept
 {
-    double totalExpenses{};
-
-    for (const auto &entry : entries)
+    double total_expenses{};
+    for (auto &entry : entries)
     {
-        if (entry->getAmount() < 0 && entry->getType() == EntryType::SIMPLE)
-            totalExpenses += entry->getAmount();
+        if (entry->amount() < 0 && entry->type() == EntryType::SIMPLE)
+            total_expenses += entry->amount();
     }
 
-    return totalExpenses;
+    return total_expenses;
 }
 
-double MonthEntry::getBalance() const
+double MonthEntry::balance() const noexcept
 {
-    return getIncome() + getExpenses() + getAbos();
+    return income() + expenses() + abos();
 }

@@ -5,19 +5,19 @@
 
 namespace Entry
 {
-    shared_simple fromString(const std::string &line);
+    shared_simple from_string(const std::string &line) noexcept;
 
-    shared_abo fromStringAbo(const std::string &line);
+    shared_abo from_string_abo(const std::string &line) noexcept;
 
-    shared_simple make_simple(std::string date, std::string tag, double amount);
+    shared_simple make_simple(std::string date, std::string tag, double amount) noexcept;
 
-    shared_abo make_abo(std::string date, std::string tag, double amount, PayInterval interval);
+    shared_abo make_abo(std::string date, std::string tag, double amount, PayInterval interval) noexcept;
 
-    shared_month make_month(std::string monthNr);
+    shared_month make_month(std::string month_nr) noexcept;
 
-    shared_year make_year(std::string yearNr);
+    shared_year make_year(std::string year_nr) noexcept;
 
-    shared_year getYear(const std::string &year);
+    shared_year year(const std::string &_year) noexcept;
 
-    shared_month getMonth(const std::string &month, const std::string &year);
+    shared_month month(const std::string &_month, const std::string &_year) noexcept;
 }

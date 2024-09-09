@@ -2,7 +2,7 @@
 
 #include "config/Config.hpp"
 #include "option/Option.hpp"
-#include "utils/StringUtils.hpp"
+#include "utils/strings.hpp"
 #include "utils/Logger.hpp"
 
 #include <clocale>
@@ -28,7 +28,7 @@ int main(int argc, char **args)
     auto config = std::make_unique<Config>();
 
     std::string firstArg{args[1]};
-    auto option = Option::find(Okane::String::toLower(firstArg));
+    auto option = Option::find(okane::strings::to_lower(firstArg));
 
     if (!option)
     {

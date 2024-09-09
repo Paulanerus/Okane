@@ -44,7 +44,7 @@ void Config::save_entries()
 {
     for (const auto &year : s_AppConfig.years)
     {
-        auto year_dir = m_BaseDir + "/" + year->yearNr;
+        auto year_dir = m_BaseDir + "/" + year->year_nr;
 
         if (!std::filesystem::exists(year_dir))
             std::filesystem::create_directory(year_dir);
@@ -52,17 +52,17 @@ void Config::save_entries()
         for (const auto &month : year->months)
         {
             std::ofstream monthFile;
-            monthFile.open(year_dir + "/" + month->monthNr + ".csv");
+            monthFile.open(year_dir + "/" + month->month_nr + ".csv");
 
             if (!monthFile.is_open())
                 continue;
 
             for (const auto &entry : month->entries)
             {
-                if (entry->getType() == EntryType::ABO)
+                if (entry->type() == EntryType::ABO)
                     continue;
 
-                monthFile << entry->getDate() << ';' << entry->getTag() << ';' << okane::strings::to_string(entry->getAmount()) << '\n';
+                monthFile << entry->date() << ';' << entry->tag() << ';' << okane::strings::to_string(entry->amount()) << '\n';
             }
         }
     }
@@ -104,7 +104,7 @@ void Config::load_entries()
                 if (!okane::rgx::matches_entry(line))
                     continue;
 
-                month_entry->add(Entry::fromString(line));
+                month_entry->add(Entry::from_string(line));
             }
 
             year->add(month_entry);
@@ -130,18 +130,18 @@ void Config::load_abos()
         if (!okane::rgx::matches_abo(line))
             continue;
 
-        auto abo_from_str = Entry::fromStringAbo(line);
+        auto abo_from_str = Entry::from_string_abo(line);
 
-        auto abo_date = okane::strings::split_str(abo_from_str->getDate(), '.');
+        auto abo_date = okane::strings::split_str(abo_from_str->date(), '.');
 
         for (const auto &year : s_AppConfig.years)
         {
-            if (year->yearNr < abo_date[2])
+            if (year->year_nr < abo_date[2])
                 continue;
 
             for (const auto &month : year->months)
             {
-                if (month->monthNr < abo_date[1])
+                if (month->month_nr < abo_date[1])
                     continue;
 
                 month->add(abo_from_str);
@@ -161,7 +161,7 @@ void Config::save_abos()
         return;
 
     for (const auto &abo : s_AppConfig.abos)
-        abo_file << abo->getDate() << ';' << abo->getTag() << ';' << okane::strings::to_string(abo->getAmount()) << ";" << abo->getInterval() << '\n';
+        abo_file << abo->date() << ';' << abo->tag() << ';' << okane::strings::to_string(abo->amount()) << ";" << static_cast<std::underlying_type_t<PayInterval>>(abo->interval()) << '\n';
 }
 
 void Config::sort_entries()
@@ -172,12 +172,12 @@ void Config::sort_entries()
         {
             std::sort(month->entries.begin(), month->entries.end(), [](const shared_simple &e1, const shared_simple &e2)
                       { 
-                    if(e1->getType() != e2->getType())
-                        return e1->getType() > e2->getType();
-                    else if (e1->getDate() != e2->getDate())
-                        return e1->getDate() < e2->getDate();
+                    if(e1->type() != e2->type())
+                        return e1->type() > e2->type();
+                    else if (e1->date() != e2->date())
+                        return e1->date() < e2->date();
                     else
-                        return e1->getAmount() > e2->getAmount(); });
+                        return e1->amount() > e2->amount(); });
         }
     }
 }

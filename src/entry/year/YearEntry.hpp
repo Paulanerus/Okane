@@ -4,10 +4,10 @@
 
 struct YearEntry
 {
-    std::string yearNr;
+    std::string year_nr;
     std::vector<shared_month> months;
 
-    YearEntry(std::string yearNr) : yearNr(yearNr) {}
+    YearEntry(std::string year_nr) : year_nr(year_nr) {}
 
     void add(const shared_month &month)
     {

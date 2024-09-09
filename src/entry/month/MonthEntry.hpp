@@ -2,27 +2,28 @@
 
 #include "../base/SimpleEntry.hpp"
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 struct MonthEntry
 {
-    std::string monthNr;
+    std::string month_nr;
     std::vector<shared_simple> entries;
 
-    MonthEntry(std::string monthNr) : monthNr(monthNr) {}
+    MonthEntry(std::string month_nr) noexcept : month_nr(month_nr) {}
 
     void add(const shared_simple &entry);
 
-    bool erase(const size_t index);
+    bool erase(std::size_t index);
 
-    double getIncome() const;
+    double income() const noexcept;
 
-    double getAbos() const;
+    double abos() const noexcept;
 
-    double getExpenses() const;
+    double expenses() const noexcept;
 
-    double getBalance() const;
+    double balance() const noexcept;
 };
 
 typedef std::shared_ptr<MonthEntry> shared_month;

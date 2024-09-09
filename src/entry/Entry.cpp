@@ -1,65 +1,65 @@
 #include "Entry.hpp"
 
 #include "../config/Config.hpp"
-#include "../utils/StringUtils.hpp"
+#include "../utils/strings.hpp"
 
 #include <sstream>
 
-shared_simple Entry::fromString(const std::string &line)
+shared_simple Entry::from_string(const std::string &line) noexcept
 {
-    auto parts = Okane::String::splitStr(line, ';');
+    auto parts = okane::strings::split_str(line, ';');
 
     return Entry::make_simple(parts[0], parts[1], std::stod(parts[2]));
 }
 
-shared_abo Entry::fromStringAbo(const std::string &line)
+shared_abo Entry::from_string_abo(const std::string &line) noexcept
 {
-    auto parts = Okane::String::splitStr(line, ';');
+    auto parts = okane::strings::split_str(line, ';');
 
     return Entry::make_abo(parts[0], parts[1], std::stod(parts[2]), parts[3] == "1" ? PayInterval::YEARLY : PayInterval::MONTHLY);
 }
 
-shared_simple Entry::make_simple(std::string date, std::string tag, double amount)
+shared_simple Entry::make_simple(std::string date, std::string tag, double amount) noexcept
 {
     return std::make_shared<SimpleEntry>(date, tag, amount);
 }
 
-shared_abo Entry::make_abo(std::string date, std::string tag, double amount, PayInterval interval)
+shared_abo Entry::make_abo(std::string date, std::string tag, double amount, PayInterval interval) noexcept
 {
     return std::make_shared<AboEntry>(date, tag, amount, interval);
 }
 
-shared_month Entry::make_month(std::string monthNr)
+shared_month Entry::make_month(std::string month_nr) noexcept
 {
-    return std::make_shared<MonthEntry>(monthNr);
+    return std::make_shared<MonthEntry>(month_nr);
 }
 
-shared_year Entry::make_year(std::string yearNr)
+shared_year Entry::make_year(std::string year_nr) noexcept
 {
-    return std::make_shared<YearEntry>(yearNr);
+    return std::make_shared<YearEntry>(year_nr);
 }
 
-shared_year Entry::getYear(const std::string &year)
+shared_year Entry::year(const std::string &_year) noexcept
 {
-    for (const auto &yearEntry : Config::appConfig.years)
+    for (auto &yearEntry : Config::s_AppConfig.years)
     {
-        if (yearEntry->yearNr == year)
+        if (yearEntry->year_nr == _year)
             return {yearEntry};
     }
 
     return nullptr;
 }
 
-shared_month Entry::getMonth(const std::string &month, const std::string &year)
+shared_month Entry::month(const std::string &_month, const std::string &_year) noexcept
 {
-    auto yearEntry = getYear(year);
+    auto yearEntry = year(_year);
 
     if (!yearEntry)
         return nullptr;
 
-    for (const auto &monthEntry : yearEntry->months)
+    for (auto &monthEntry : yearEntry->months)
     {
-        if (monthEntry->monthNr == month)
+        if (monthEntry->month_nr == _month)
             return {monthEntry};
     }
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-enum EntryType
+enum class EntryType
 {
     SIMPLE,
     ABO,
@@ -12,34 +12,34 @@ enum EntryType
 class SimpleEntry
 {
 public:
-    SimpleEntry(std::string date, std::string tag, double amount) : m_Date(date), m_Tag(tag), m_Amount(amount) {}
+    SimpleEntry(std::string date, std::string tag, double amount) noexcept : m_Date(date), m_Tag(tag), m_Amount(amount) {}
 
-    std::string getDate() const
+    std::string date() const noexcept
     {
         return m_Date;
     }
 
-    std::string getTag() const
+    std::string tag() const noexcept
     {
         return m_Tag;
     }
 
-    double getAmount() const
+    double amount() const noexcept
     {
         return m_Amount;
     }
 
-    virtual EntryType getType() const
+    virtual EntryType type() const noexcept
     {
         return EntryType::SIMPLE;
     }
 
 protected:
-    std::string m_Date;
+    const std::string m_Date;
 
-    std::string m_Tag;
+    const std::string m_Tag;
 
-    double m_Amount;
+    const double m_Amount;
 };
 
 typedef std::shared_ptr<SimpleEntry> shared_simple;
