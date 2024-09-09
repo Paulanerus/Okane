@@ -72,9 +72,17 @@ namespace okane
 
         inline tm *current_time() noexcept
         {
+            static std::tm local_time;
+
             std::int64_t epoch = std::time(nullptr);
 
-            return std::localtime(&epoch);
+#ifdef _WIN32
+            localtime_s(&local_time, &epoch);
+#else
+            localtime_r(&epoch, &local_time); // FIXME: Test gnu/linux implementation.
+#endif
+
+            return &local_time;
         }
 
         inline std::string to_string_fmt(const tm *local_time, const std::string &fmt) noexcept
