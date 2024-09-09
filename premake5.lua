@@ -9,6 +9,8 @@ project "Okane"
     targetdir "bin/%{cfg.buildcfg}"
     location "build/"
 
+    warnings "Extra"
+
     includedirs {"libs/rang/include"}
 
     files {"src/**.hpp", "src/**.cpp"}

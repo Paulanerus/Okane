@@ -9,7 +9,7 @@ void MonthEntry::add(const shared_simple &entry)
 
 bool MonthEntry::erase(const size_t index)
 {
-    if (index >= entries.size() || index < 0)
+    if (index >= entries.size())
         return false;
 
     entries.erase(entries.begin() + index);

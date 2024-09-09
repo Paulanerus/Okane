@@ -66,7 +66,7 @@ public:
             return;
         }
 
-        if (index >= 0 && index < monthEntry->entries.size() && monthEntry->entries[index]->getType() == EntryType::ABO)
+        if (index < monthEntry->entries.size() && monthEntry->entries[index]->getType() == EntryType::ABO)
         {
             Okane::Logging::printlnWarn("The provided index belongs to an abo entry. Do you want to completely delete the abo? (Y/n)");
 

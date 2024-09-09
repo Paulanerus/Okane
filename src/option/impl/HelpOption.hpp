@@ -22,7 +22,7 @@ private:
     };
 
 public:
-    void execute(const std::vector<std::string> &args) override
+    void execute([[maybe_unused]] const std::vector<std::string> &args) override
     {
         std::cout << ' ' << "Okane " << rang::fgB::blue << "<option> " << rang::style::reset << "<args>\n";
 
