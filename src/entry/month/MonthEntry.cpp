@@ -39,7 +39,7 @@ double MonthEntry::abos() const noexcept
 
         auto abo = std::static_pointer_cast<AboEntry>(entry);
 
-        total_abos += abo->amount() / (abo->getInterval() == PayInterval::YEARLY ? 12 : 1);
+        total_abos += abo->amount() / (abo->interval() == PayInterval::YEARLY ? 12 : 1);
     }
 
     return total_abos;

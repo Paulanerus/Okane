@@ -37,7 +37,7 @@ int main(int argc, char **args)
     }
 
     std::cout << std::endl;
-    option->execute(Option::copyAfter(argc, args));
+    option->execute(Option::copy_after(argc, args));
     std::cout << std::endl;
 
     return EXIT_SUCCESS;

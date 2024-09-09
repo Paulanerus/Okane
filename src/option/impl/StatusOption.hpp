@@ -2,11 +2,13 @@
 
 #include "rang.hpp"
 
-#include "../Option.hpp"
-#include "../../utils/OkaneUtils.hpp"
-#include "../../entry/Entry.hpp"
 #include "../../table/TableView.hpp"
 #include "../../config/Config.hpp"
+#include "../../utils/strings.hpp"
+#include "../../entry/Entry.hpp"
+#include "../../utils/regex.hpp"
+#include "../../utils/time.hpp"
+#include "../Option.hpp"
 
 #include <numeric>
 #include <iostream>
@@ -17,62 +19,62 @@ class StatusOption : public Option
 public:
     void execute(const std::vector<std::string> &args) override
     {
-        std::string month = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%m");
-        std::string year = Okane::Time::toStringFMT(Okane::Time::getCurrentTime(), "%Y");
+        std::string month = okane::time::to_string_fmt(okane::time::current_time(), "%m");
+        std::string year = okane::time::to_string_fmt(okane::time::current_time(), "%Y");
 
         if (args.size() == 1)
         {
-            auto monthById = Okane::Time::getMonthFromId(Okane::String::toLower(args[0]));
+            auto month_by_id = okane::time::month_from_id(okane::strings::to_lower(args[0]));
 
-            if (!monthById.has_value())
+            if (!month_by_id.has_value())
             {
                 Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
                 return;
             }
 
-            month = monthById.value();
+            month = month_by_id.value();
         }
         else if (args.size() > 1)
         {
-            auto monthById = Okane::Time::getMonthFromId(Okane::String::toLower(args[0]));
+            auto month_by_id = okane::time::month_from_id(okane::strings::to_lower(args[0]));
 
-            if (!monthById.has_value())
+            if (!month_by_id.has_value())
             {
                 Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
                 return;
             }
 
-            month = monthById.value();
+            month = month_by_id.value();
 
-            auto yearArg = args[1];
+            auto year_arg = args[1];
 
-            if (!Okane::Regex::matchesPNumber(yearArg))
+            if (!okane::rgx::matches_pnumber(year_arg))
             {
                 Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
                 return;
             }
 
-            year = yearArg;
+            year = year_arg;
         }
 
-        const auto monthEntry = Entry::getMonth(month, year);
+        const auto month_entry = Entry::month(month, year);
 
-        if (!monthEntry)
+        if (!month_entry)
         {
             Okane::Logging::printlnWarn("You don't have any entry for " + month + '.' + year + ".");
             return;
         }
 
-        auto balance = monthEntry->getBalance();
+        auto balance = month_entry->balance();
 
-        auto table = std::make_unique<TableView>();
+        TableView table_view;
 
-        table->addRow({"Category", "Amount"});
-        table->addRow({"Income", Okane::String::toStringWithStyle(Okane::String::toString(monthEntry->getIncome()) + " " + Config::appConfig.currency, rang::fgB::green)});
-        table->addRow({"Abos", Okane::String::toStringWithStyle(Okane::String::toString(monthEntry->getAbos()) + " " + Config::appConfig.currency, rang::fgB::yellow)});
-        table->addRow({"Expenses", Okane::String::toStringWithStyle(Okane::String::toString(monthEntry->getExpenses()) + " " + Config::appConfig.currency, rang::fgB::red)});
-        table->addRow({"Balance", Okane::String::toStringWithStyle(Okane::String::toString(balance) + " " + Config::appConfig.currency, balance < 0 ? rang::fgB::red : rang::fgB::green)});
+        table_view.add_row({"Category", "Amount"});
+        table_view.add_row({"Income", okane::strings::to_string_with_style(okane::strings::to_string(month_entry->income()) + " " + Config::s_AppConfig.currency, rang::fgB::green)});
+        table_view.add_row({"Abos", okane::strings::to_string_with_style(okane::strings::to_string(month_entry->abos()) + " " + Config::s_AppConfig.currency, rang::fgB::yellow)});
+        table_view.add_row({"Expenses", okane::strings::to_string_with_style(okane::strings::to_string(month_entry->expenses()) + " " + Config::s_AppConfig.currency, rang::fgB::red)});
+        table_view.add_row({"Balance", okane::strings::to_string_with_style(okane::strings::to_string(balance) + " " + Config::s_AppConfig.currency, balance < 0 ? rang::fgB::red : rang::fgB::green)});
 
-        table->print();
+        table_view.print();
     }
 };

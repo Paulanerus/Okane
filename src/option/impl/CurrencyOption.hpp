@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Option.hpp"
 #include "../../config/Config.hpp"
 #include "../../utils/Logger.hpp"
+#include "../Option.hpp"
 
 #include <iostream>
 
@@ -18,8 +18,8 @@ public:
             return;
         }
 
-        Config::appConfig.currency = args[0];
+        Config::s_AppConfig.currency = args[0];
 
-        Okane::Logging::println("Currency set to '" + Config::appConfig.currency + "'" );
+        Okane::Logging::println("Currency set to '" + Config::s_AppConfig.currency + "'");
     }
 };

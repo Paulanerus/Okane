@@ -8,7 +8,7 @@
 #include "impl/RemoveOption.hpp"
 #include "impl/AboOption.hpp"
 
-const std::unordered_map<std::unordered_set<std::string>, std::shared_ptr<Option>, Option::HashUSet> Option::m_Args = {
+const std::unordered_map<std::unordered_set<std::string>, std::shared_ptr<Option>, Option::HashUSet> Option::s_Args = {
     {{"help", "h"}, std::make_shared<HelpOption>()},
     {{"detailed", "det", "d"}, std::make_shared<DetailedOption>()},
     {{"status", "stat", "s"}, std::make_shared<StatusOption>()},
@@ -20,7 +20,7 @@ const std::unordered_map<std::unordered_set<std::string>, std::shared_ptr<Option
 
 std::shared_ptr<Option> Option::find(const std::string &arg)
 {
-    for (const auto &[keys, val] : m_Args)
+    for (auto &[keys, val] : s_Args)
     {
         if (keys.find(arg) != keys.end())
             return val;
@@ -29,7 +29,7 @@ std::shared_ptr<Option> Option::find(const std::string &arg)
     return nullptr;
 }
 
-std::vector<std::string> Option::copyAfter(int argc, char **args)
+std::vector<std::string> Option::copy_after(int argc, char **args)
 {
     std::vector<std::string> argsLeft;
 
