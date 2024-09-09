@@ -17,13 +17,13 @@ public:
     {
         if (args.size() < 1)
         {
-            Okane::Logging::printlnError("Please provide at least an index.");
+            std::cout << rang::fgB::red << "Please provide at least an index." << rang::style::reset << std::endl;
             return;
         }
 
         if (!okane::rgx::matches_pnumber(args[0]))
         {
-            Okane::Logging::printlnError("Please enter a valid index. (0, 1 or 20)");
+            std::cout << rang::fgB::red << "Please enter a valid index. (0, 1 or 20)" << rang::style::reset << std::endl;
             return;
         }
 
@@ -38,7 +38,7 @@ public:
 
             if (!month_by_id.has_value())
             {
-                Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
+                std::cout << rang::fgB::red << "Please provide a valid month. (January, Jan, 01 or 1)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -53,7 +53,7 @@ public:
 
             if (!okane::rgx::matches_pnumber(year_arg))
             {
-                Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
+                std::cout << rang::fgB::red << "Please provide a valid year. (2022 or 2023)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -64,19 +64,19 @@ public:
 
         if (!month_entry)
         {
-            Okane::Logging::printlnWarn("You don't have any entries for " + month + '.' + year + ".");
+            std::cout << rang::fgB::yellow << "You don't have any entries for " << month << '.' << year << "." << rang::style::reset << std::endl;
             return;
         }
 
         if (index < month_entry->entries.size() && month_entry->entries[index]->type() == EntryType::ABO)
         {
-            Okane::Logging::printlnWarn("The provided index belongs to an abo entry. Do you want to completely delete the abo? (Y/n)");
+            std::cout << rang::fgB::yellow << "The provided index belongs to an abo entry. Do you want to completely delete the abo? (Y/n)" << rang::style::reset << std::endl;
 
             char input = std::getchar();
 
             if (ALLOWED_YES.find(input) == ALLOWED_YES.end())
             {
-                Okane::Logging::println("Aborted...");
+                std::cout << rang::fgB::green << "Aborted..." << rang::style::reset << std::endl;
                 return;
             }
 
@@ -87,23 +87,23 @@ public:
 
             if (abo_entry == Config::s_AppConfig.abos.end())
             {
-                Okane::Logging::printlnError("Surprise! The entry isn't there anymore... (You should not see this)");
+                std::cout << rang::fgB::red << "Surprise! The entry isn't there anymore... (You should not see this)" << rang::style::reset << std::endl;
                 return;
             }
 
             Config::s_AppConfig.abos.erase(abo_entry);
 
-            Okane::Logging::println("Successfully removed abo!");
+            std::cout << rang::fgB::green << "Successfully removed abo!" << rang::style::reset << std::endl;
             return;
         }
 
         if (!month_entry->erase(index))
         {
-            Okane::Logging::printlnError("Your provided index (" + std::to_string(index) + ") is greater than the amount of entries for " + month + '.' + year + ".");
+            std::cout << rang::fgB::red << "Your provided index (" << std::to_string(index) << ") is greater than the amount of entries for " << month << '.' << year << "." << rang::style::reset << std::endl;
             return;
         }
 
-        Okane::Logging::println("Successfully removed entry!");
+        std::cout << rang::fgB::green << "Successfully removed entry!" << rang::style::reset << std::endl;
     }
 
 private:

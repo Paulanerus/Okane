@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../utils/Logger.hpp"
 #include "../Option.hpp"
 #include "rang.hpp"
 
@@ -17,7 +16,7 @@ public:
         for (const auto &[option, info] : options)
             std::cout << '\t' << rang::fgB::blue << option << rang::style::reset << ' ' << info << '\n';
 
-        Okane::Logging::printlnWarn("\nTip: <date>, <month> and <year> are always optional arguments and will be replaced with the current corresponding value.");
+        std::cout << rang::fgB::yellow << "\nTip: <date>, <month> and <year> are always optional arguments and will be replaced with the current corresponding value." << rang::style::reset << std::endl;
     }
 
 private:

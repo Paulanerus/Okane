@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../config/Config.hpp"
-#include "../../utils/Logger.hpp"
 #include "../Option.hpp"
 
 #include <iostream>
@@ -14,12 +13,12 @@ public:
     {
         if (args.empty())
         {
-            Okane::Logging::printlnError("Please provide a currency symbol/text like €, $ or Yen.");
+            std::cout << rang::fgB::red << "Please provide a currency symbol/text like €, $ or Yen." << rang::style::reset << std::endl;
             return;
         }
 
         Config::s_AppConfig.currency = args[0];
 
-        Okane::Logging::println("Currency set to '" + Config::s_AppConfig.currency + "'");
+        std::cout << rang::fgB::green << "Currency set to '" << Config::s_AppConfig.currency << "'" << rang::style::reset << std::endl;
     }
 };

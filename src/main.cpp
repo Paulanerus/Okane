@@ -3,7 +3,6 @@
 #include "config/Config.hpp"
 #include "option/Option.hpp"
 #include "utils/strings.hpp"
-#include "utils/Logger.hpp"
 
 #include <clocale>
 #include <iostream>
@@ -32,7 +31,8 @@ int main(int argc, char **args)
 
     if (!option)
     {
-        Okane::Logging::printlnError("\nOption not found try 'okane help' for more informations\n");
+        std::cout << rang::fgB::red << "\nOption not found try 'okane help' for more informations\n"
+                  << rang::style::reset << std::endl;
         return EXIT_SUCCESS;
     }
 

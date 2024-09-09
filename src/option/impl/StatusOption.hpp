@@ -28,7 +28,7 @@ public:
 
             if (!month_by_id.has_value())
             {
-                Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
+                std::cout << rang::fgB::red << "Please provide a valid month. (January, Jan, 01 or 1)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -40,7 +40,7 @@ public:
 
             if (!month_by_id.has_value())
             {
-                Okane::Logging::printlnError("Please provide a valid month. (January, Jan, 01 or 1)");
+                std::cout << rang::fgB::red << "Please provide a valid month. (January, Jan, 01 or 1)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -50,7 +50,7 @@ public:
 
             if (!okane::rgx::matches_pnumber(year_arg))
             {
-                Okane::Logging::printlnError("Please provide a valid year. (2022 or 2023)");
+                std::cout << rang::fgB::red << "Please provide a valid year. (2022 or 2023)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -61,7 +61,7 @@ public:
 
         if (!month_entry)
         {
-            Okane::Logging::printlnWarn("You don't have any entry for " + month + '.' + year + ".");
+            std::cout << rang::fgB::yellow << "You don't have any entry for " << month << '.' << year << "." << rang::style::reset << std::endl;
             return;
         }
 

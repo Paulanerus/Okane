@@ -27,19 +27,18 @@ public:
                 table_view.add_row({abo->date(), abo->tag(), okane::strings::to_string_with_style(okane::strings::to_string(abo->amount()) + " " + Config::s_AppConfig.currency, abo->amount() < 0 ? rang::fgB::red : rang::fgB::green), abo->interval() == PayInterval::YEARLY ? "Yearly" : "Monthly"});
 
             table_view.print();
-
             return;
         }
 
         if (args.size() < 2)
         {
-            Okane::Logging::printlnError("Please provide at least an amount and tag.");
+            std::cout << rang::fgB::red << "Please provide at least an amount and tag." << rang::style::reset << std::endl;
             return;
         }
 
         if (!okane::rgx::matches_amount(args[0]) || !okane::rgx::matches_tag(args[1]))
         {
-            Okane::Logging::printlnError("Please provide a valid amount and tag.");
+            std::cout << rang::fgB::red << "Please provide a valid amount and tag." << rang::style::reset << std::endl;
             return;
         }
 
@@ -58,7 +57,7 @@ public:
                 interval = subscription.value();
             else if (!okane::time::format_date(args[2], date))
             {
-                Okane::Logging::printlnError("Please enter a valid interval or date.");
+                std::cout << rang::fgB::red << "Please enter a valid interval or date." << rang::style::reset << std::endl;
                 return;
             }
         }
@@ -69,7 +68,7 @@ public:
 
             if (!subscription.has_value())
             {
-                Okane::Logging::printlnError("Please provide a valid interval value. (0, monthly, month or 1, yearly, year)");
+                std::cout << rang::fgB::red << "Please provide a valid interval value. (0, monthly, month or 1, yearly, year)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -77,7 +76,7 @@ public:
 
             if (!okane::time::format_date(args[3], date))
             {
-                Okane::Logging::printlnError("Please enter a valid date. (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)");
+                std::cout << rang::fgB::red << "Please enter a valid date. (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)" << rang::style::reset << std::endl;
                 return;
             }
         }
@@ -87,13 +86,13 @@ public:
 
         if (duplicate != Config::s_AppConfig.abos.end())
         {
-            Okane::Logging::printlnWarn("There is already a similar abo. (" + tag + ", " + okane::strings::to_string(amount) + ")");
+            std::cout << rang::fgB::yellow << "There is already a similar abo. (" << tag << ", " << okane::strings::to_string(amount) << ")" << rang::style::reset << std::endl;
             return;
         }
 
         Config::s_AppConfig.abos.push_back(Entry::make_abo(date, tag, amount, interval));
 
-        Okane::Logging::println("Successfully added abo!");
+        std::cout << rang::fgB::green << "Successfully added abo!" << rang::style::reset << std::endl;
     }
 
 private:

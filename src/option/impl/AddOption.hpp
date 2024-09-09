@@ -17,7 +17,7 @@ public:
     {
         if (args.size() <= 1)
         {
-            Okane::Logging::printlnError("Please provide at least an amount and tag.");
+            std::cout << rang::fgB::red << "Please provide at least an amount and tag." << rang::style::reset << std::endl;
             return;
         }
 
@@ -30,13 +30,13 @@ public:
 
         if (!okane::rgx::matches_amount(args[0]))
         {
-            Okane::Logging::printlnError("Please enter a valid amount number. (100, -6.6 or 12.35)");
+            std::cout << rang::fgB::red << "Please enter a valid amount number. (100, -6.6 or 12.35)" << rang::style::reset << std::endl;
             return;
         }
 
         if (!okane::rgx::matches_tag(args[1]))
         {
-            Okane::Logging::printlnError("Please enter a valid tag.");
+            std::cout << rang::fgB::red << "Please enter a valid tag." << rang::style::reset << std::endl;
             return;
         }
 
@@ -49,7 +49,7 @@ public:
             std::string date;
             if (!okane::time::format_date(args[2], date))
             {
-                Okane::Logging::printlnError("Please enter a valid date. (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)");
+                std::cout << rang::fgB::red << "Please enter a valid date. (01.01.2023, 1.1.2023, 1.01.2023, or 1.1.2023)" << rang::style::reset << std::endl;
                 return;
             }
 
@@ -62,7 +62,7 @@ public:
 
         if (day == "29" && month == "02" && !okane::time::is_leap_year(std::stol(year)))
         {
-            Okane::Logging::printlnError("You've entered " + day + '.' + month + '.' + year + " which is not a valid year. (not a leap year)");
+            std::cout << rang::fgB::red << "You've entered " << day << '.' << month << '.' << year << " which is not a valid year. (not a leap year)" << rang::style::reset << std::endl;
             return;
         }
 
@@ -84,6 +84,6 @@ public:
 
         month_entry->add(Entry::make_simple((day + "." + month + "." + year), tag, amount));
 
-        Okane::Logging::println("Successfully added entry!");
+        std::cout << rang::fgB::green << "Successfully added entry!" << rang::style::reset << std::endl;
     }
 };
