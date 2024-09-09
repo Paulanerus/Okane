@@ -2,19 +2,18 @@
 
 #include "rang.hpp"
 
-#include <string>
 #include <algorithm>
-#include <vector>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
+#include <string>
+#include <vector>
 
-namespace Okane
+namespace okane
 {
-
-    namespace String
+    namespace strings
     {
         template <typename T, typename U>
-        inline std::string toStringWithStyle(T const &value, U const &style)
+        inline std::string to_string_with_style(T const &value, U const &style)
         {
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << style << value << rang::style::reset;
@@ -22,14 +21,14 @@ namespace Okane
         }
 
         template <typename T>
-        inline std::string toString(T const &value)
+        inline std::string to_string(T const &value)
         {
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << value;
             return stream.str();
         }
 
-        inline std::string toLower(std::string str)
+        inline std::string to_lower(std::string str)
         {
             std::transform(str.begin(), str.end(), str.begin(),
                            [](unsigned char c)
@@ -37,7 +36,7 @@ namespace Okane
             return str;
         }
 
-        inline std::vector<std::string> splitStr(const std::string &str, char delimiter)
+        inline std::vector<std::string> split_str(const std::string &str, char delimiter)
         {
             std::vector<std::string> parts;
 

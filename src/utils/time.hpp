@@ -1,24 +1,25 @@
 #pragma once
 
-#include "RegexUtils.hpp"
-#include "StringUtils.hpp"
+#include "strings.hpp"
+#include "regex.hpp"
 
-#include <ctime>
-#include <string>
-#include <vector>
-#include <sstream>
-#include <optional>
-#include <algorithm>
-#include <iomanip>
 #include <unordered_map>
+#include <algorithm>
+#include <optional>
+#include <sstream>
+#include <iomanip>
+#include <cstdint>
+#include <vector>
+#include <string>
+#include <ctime>
 
-namespace Okane
+namespace okane
 {
-    namespace Time
+    namespace time
     {
-        const std::string DATE_FORMAT{"%d.%m.%Y"};
+        inline const std::string DATE_FORMAT{"%d.%m.%Y"};
 
-        const std::unordered_map<std::string, std::vector<std::string>> MONTH_MAP = {
+        inline const std::unordered_map<std::string, std::vector<std::string>> MONTH_MAP = {
             {"01", {"january", "jan", "1", "01"}},
             {"02", {"february", "feb", "2", "02"}},
             {"03", {"march", "mar", "3", "03"}},
@@ -33,14 +34,14 @@ namespace Okane
             {"12", {"december", "dec", "12", "12"}},
         };
 
-        inline bool isLeapYear(long year)
+        inline bool is_leap_year(long year)
         {
             return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
         }
 
-        inline std::optional<std::string> getMonthFromId(const std::string &id)
+        inline std::optional<std::string> month_from_id(const std::string &id)
         {
-            for (const auto &[month, ids] : MONTH_MAP)
+            for (auto &[month, ids] : MONTH_MAP)
             {
                 if (std::find(ids.begin(), ids.end(), id) != ids.end())
                     return month;
@@ -49,14 +50,14 @@ namespace Okane
             return {};
         }
 
-        inline bool getFormatDate(const std::string &date, std::string &insertTo)
+        inline bool format_date(const std::string &date, std::string &insert_to)
         {
-            if (!Okane::Regex::matchesDate(date))
+            if (!okane::rgx::matches_date(date))
                 return false;
 
-            const auto dateSplit = Okane::String::splitStr(date, '.');
+            const auto dateSplit = okane::strings::split_str(date, '.');
 
-            if (!Okane::Regex::matchesDay(dateSplit[0]) || !getMonthFromId(dateSplit[1]).has_value() || !Okane::Regex::matchesPNumber(dateSplit[2]))
+            if (!okane::rgx::matches_day(dateSplit[0]) || !month_from_id(dateSplit[1]).has_value() || !okane::rgx::matches_pnumber(dateSplit[2]))
                 return false;
 
             std::stringstream formatDate;
@@ -64,29 +65,29 @@ namespace Okane
                        << std::setw(2) << std::setfill('0') << dateSplit[1] << '.'
                        << dateSplit[2];
 
-            insertTo = formatDate.str();
+            insert_to = formatDate.str();
 
             return true;
         }
 
-        inline tm *getCurrentTime()
+        inline tm *current_time() noexcept
         {
-            int64_t epoch = std::time(nullptr);
+            std::int64_t epoch = std::time(nullptr);
 
             return std::localtime(&epoch);
         }
 
-        inline std::string toStringFMT(const tm *localTime, const std::string &fmt)
+        inline std::string to_string_fmt(const tm *local_time, const std::string &fmt) noexcept
         {
             std::stringstream stream;
-            stream << std::put_time(localTime, fmt.c_str());
+            stream << std::put_time(local_time, fmt.c_str());
 
             return stream.str();
         }
 
-        inline std::string toString(const tm *localTime)
+        inline std::string to_string(const tm *local_time) noexcept
         {
-            return toStringFMT(localTime, DATE_FORMAT);
+            return to_string_fmt(local_time, DATE_FORMAT);
         }
     }
 }
