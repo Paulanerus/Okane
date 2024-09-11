@@ -19,9 +19,9 @@ namespace okane
 
         enum class PayInterval
         {
-            None,
-            Monthly,
-            Yearly,
+            None = -1,
+            Monthly = 0,
+            Yearly = 1,
         };
 
         struct Entry
