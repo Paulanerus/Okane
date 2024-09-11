@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../../table/TableView.hpp"
-#include "../../config/Config.hpp"
-#include "../../utils/strings.hpp"
 #include "../../utils/regex.hpp"
-#include "../../entry/Entry.hpp"
 #include "../../utils/time.hpp"
 #include "../Option.hpp"
+#include "strings.hpp"
+#include "config.hpp"
+#include "entry.hpp"
 
 #include <unordered_map>
 #include <iostream>
@@ -18,13 +18,15 @@ class AboOption : public Option
 public:
     void execute(const std::vector<std::string> &args)
     {
+        auto &abos = okane::app_config().abos;
+
         if (args.empty())
         {
             TableView table_view;
             table_view.add_row({"Start date", "Tag", "Amount", "Interval"});
 
-            for (const auto &abo : Config::s_AppConfig.abos)
-                table_view.add_row({abo->date(), abo->tag(), okane::strings::to_string_with_style(okane::strings::to_string(abo->amount()) + " " + Config::s_AppConfig.currency, abo->amount() < 0 ? rang::fgB::red : rang::fgB::green), abo->interval() == PayInterval::YEARLY ? "Yearly" : "Monthly"});
+            for (const auto &abo : abos)
+                table_view.add_row({abo.date, abo.tag, okane::strings::convert_to_str_with_style(okane::strings::convert_to_str(abo.amount) + " " + okane::app_config().currency, abo.amount < 0 ? rang::fgB::red : rang::fgB::green), abo.interval == okane::entry::PayInterval::Yearly ? "Yearly" : "Monthly"});
 
             table_view.print();
             return;
@@ -47,7 +49,7 @@ public:
 
         std::string date = okane::time::to_string_fmt(okane::time::current_time(), "%d.%m.%Y");
 
-        auto interval = PayInterval::MONTHLY;
+        auto interval = okane::entry::PayInterval::Monthly;
 
         if (args.size() == 3)
         {
@@ -81,28 +83,28 @@ public:
             }
         }
 
-        auto duplicate = std::find_if(Config::s_AppConfig.abos.begin(), Config::s_AppConfig.abos.end(), [tag, amount](const shared_abo &_abo)
-                                      { return _abo->tag() == tag && _abo->amount() == amount; });
+        auto duplicate = std::find_if(abos.begin(), abos.end(), [tag, amount](const okane::entry::Entry &_abo)
+                                      { return _abo.tag == tag && _abo.amount == amount; });
 
-        if (duplicate != Config::s_AppConfig.abos.end())
+        if (duplicate != abos.end())
         {
-            std::cout << rang::fgB::yellow << "There is already a similar abo. (" << tag << ", " << okane::strings::to_string(amount) << ")" << rang::style::reset << std::endl;
+            std::cout << rang::fgB::yellow << "There is already a similar abo. (" << tag << ", " << okane::strings::convert_to_str(amount) << ")" << rang::style::reset << std::endl;
             return;
         }
 
-        Config::s_AppConfig.abos.push_back(Entry::make_abo(date, tag, amount, interval));
+        abos.push_back(okane::entry::make_abo(amount, tag, date, interval));
 
         std::cout << rang::fgB::green << "Successfully added abo!" << rang::style::reset << std::endl;
     }
 
 private:
-    const std::unordered_map<PayInterval, std::vector<std::string>> INTERVALS = {
-        {PayInterval::MONTHLY, {"0", "monthly", "month"}},
-        {PayInterval::YEARLY, {"1", "01", "yearly", "year"}}};
+    const std::unordered_map<okane::entry::PayInterval, std::vector<std::string>> INTERVALS = {
+        {okane::entry::PayInterval::Monthly, {"0", "monthly", "month"}},
+        {okane::entry::PayInterval::Yearly, {"1", "01", "yearly", "year"}}};
 
-    std::optional<PayInterval> is_interval(const std::string &input)
+    std::optional<okane::entry::PayInterval> is_interval(const std::string &input)
     {
-        auto lowered_input = okane::strings::to_lower(input);
+        auto lowered_input = okane::strings::convert_to_lowercase(input);
 
         for (const auto &[interval, ids] : INTERVALS)
         {

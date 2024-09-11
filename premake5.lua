@@ -11,7 +11,7 @@ project "Okane"
 
     warnings "Extra"
 
-    includedirs {"libs/rang/include"}
+    includedirs {"libs/rang/include", "include/"}
 
     files {"src/**.hpp", "src/**.cpp"}
 

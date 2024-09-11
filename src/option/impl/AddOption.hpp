@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../../config/Config.hpp"
-#include "../../utils/strings.hpp"
-#include "../../entry/Entry.hpp"
 #include "../../utils/regex.hpp"
 #include "../../utils/time.hpp"
 #include "../Option.hpp"
+#include "strings.hpp"
+#include "config.hpp"
+#include "entry.hpp"
 
 #include <iostream>
 
@@ -66,23 +66,17 @@ public:
             return;
         }
 
-        auto year_entry = Entry::year(year);
+        auto year_entry = okane::entry::find_year_by_id(okane::app_config().years, year);
 
-        if (!year_entry)
-        {
-            year_entry = Entry::make_year(year);
-            Config::s_AppConfig.years.push_back(year_entry);
-        }
+        if (!year_entry.has_value())
+            okane::app_config().years.push_back(okane::entry::make_year(year));
 
-        auto month_entry = Entry::month(month, year);
+        auto month_entry = okane::entry::find_month_by_id(okane::app_config().years, month, year);
 
-        if (!month_entry)
-        {
-            month_entry = Entry::make_month(month);
-            year_entry->add(month_entry);
-        }
+        if (!month_entry.has_value())
+            (year_entry.has_value() ? year_entry->get() : okane::app_config().years.back()).months.push_back(okane::entry::make_month(month));
 
-        month_entry->add(Entry::make_simple((day + "." + month + "." + year), tag, amount));
+        (month_entry.has_value() ? month_entry->get() : (year_entry.has_value() ? year_entry->get() : okane::app_config().years.back()).months.back()).add(okane::entry::make_entry(amount, tag, (day + "." + month + "." + year)));
 
         std::cout << rang::fgB::green << "Successfully added entry!" << rang::style::reset << std::endl;
     }

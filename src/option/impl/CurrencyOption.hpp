@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../config/Config.hpp"
 #include "../Option.hpp"
+#include "config.hpp"
 
 #include <iostream>
 
@@ -17,8 +17,8 @@ public:
             return;
         }
 
-        Config::s_AppConfig.currency = args[0];
+        okane::app_config().currency = args[0];
 
-        std::cout << rang::fgB::green << "Currency set to '" << Config::s_AppConfig.currency << "'" << rang::style::reset << std::endl;
+        std::cout << rang::fgB::green << "Currency set to '" << okane::app_config().currency << "'" << rang::style::reset << std::endl;
     }
 };

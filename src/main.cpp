@@ -1,11 +1,11 @@
 #include "rang.hpp"
 
-#include "config/Config.hpp"
 #include "option/Option.hpp"
-#include "utils/strings.hpp"
+#include "strings.hpp"
+#include "config.hpp"
 
-#include <clocale>
 #include <iostream>
+#include <clocale>
 
 #ifdef _WIN32
 #include "Windows.h"
@@ -27,10 +27,10 @@ int main(int argc, char **args)
     setlocale(LC_CTYPE, "en_US.utf8");
 #endif
 
-    auto config = std::make_unique<Config>();
+    okane::load_config();
 
     std::string firstArg{args[1]};
-    auto option = Option::find(okane::strings::to_lower(firstArg));
+    auto option = Option::find(okane::strings::convert_to_lowercase(firstArg));
 
     if (!option)
     {
@@ -42,6 +42,8 @@ int main(int argc, char **args)
     std::cout << std::endl;
     option->execute(Option::copy_after(argc, args));
     std::cout << std::endl;
+
+    okane::save_config();
 
     return EXIT_SUCCESS;
 }

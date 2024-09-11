@@ -13,7 +13,7 @@ namespace okane
     namespace strings
     {
         template <typename T, typename U>
-        inline std::string to_string_with_style(T const &value, U const &style)
+        inline std::string convert_to_str_with_style(T const &value, U const &style)
         {
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << style << value << rang::style::reset;
@@ -21,14 +21,14 @@ namespace okane
         }
 
         template <typename T>
-        inline std::string to_string(T const &value)
+        inline std::string convert_to_str(T const &value)
         {
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << value;
             return stream.str();
         }
 
-        inline std::string to_lower(std::string str)
+        inline std::string convert_to_lowercase(std::string str)
         {
             std::transform(str.begin(), str.end(), str.begin(),
                            [](unsigned char c)

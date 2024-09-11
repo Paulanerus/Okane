@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../../table/TableView.hpp"
-#include "../../config/Config.hpp"
-#include "../../utils/strings.hpp"
 #include "../../utils/regex.hpp"
-#include "../../entry/Entry.hpp"
 #include "../../utils/time.hpp"
 #include "../Option.hpp"
+#include "strings.hpp"
+#include "config.hpp"
+#include "entry.hpp"
 
 #include <iostream>
 #include <cstdint>
@@ -22,7 +22,7 @@ public:
 
         if (args.size() == 1)
         {
-            auto month_by_id = okane::time::month_from_id(okane::strings::to_lower(args[0]));
+            auto month_by_id = okane::time::month_from_id(okane::strings::convert_to_lowercase(args[0]));
 
             if (!month_by_id.has_value())
             {
@@ -34,7 +34,7 @@ public:
         }
         else if (args.size() > 1)
         {
-            auto month_by_id = okane::time::month_from_id(okane::strings::to_lower(args[0]));
+            auto month_by_id = okane::time::month_from_id(okane::strings::convert_to_lowercase(args[0]));
 
             if (!month_by_id.has_value())
             {
@@ -55,9 +55,9 @@ public:
             year = year_arg;
         }
 
-        const auto month_entry = Entry::month(month, year);
+        auto month_entry = okane::entry::find_month_by_id(okane::app_config().years, month, year);
 
-        if (!month_entry)
+        if (!month_entry.has_value())
         {
             std::cout << rang::fgB::yellow << "You don't have any entry for " << month << '.' << year << "." << rang::style::reset << std::endl;
             return;
@@ -66,17 +66,19 @@ public:
         TableView table_view;
         table_view.add_row({"Index", "Date", "Tag", "Amount"});
 
-        for (std::size_t i{}; i < month_entry->entries.size(); i++)
+        for (std::size_t i{}; i < month_entry->get().entries.size(); i++)
         {
-            auto amount = month_entry->entries[i]->amount();
+            auto current = month_entry->get().entries[i];
 
-            if (month_entry->entries[i]->type() == EntryType::ABO && std::static_pointer_cast<AboEntry>(month_entry->entries[i])->interval() == PayInterval::YEARLY)
+            auto amount = current.amount;
+
+            if (current.type == okane::entry::EntryType::Abo && current.interval == okane::entry::PayInterval::Yearly)
                 amount /= 12;
 
             table_view.add_row(
-                {std::to_string(i), month_entry->entries[i]->date(), month_entry->entries[i]->tag(),
-                 okane::strings::to_string_with_style(okane::strings::to_string(amount) + " " + Config::s_AppConfig.currency, month_entry->entries[i]->type() == EntryType::ABO ? rang::fgB::yellow : amount < 0 ? rang::fgB::red
-                                                                                                                                                                                                                 : rang::fgB::green)});
+                {std::to_string(i), current.date, current.tag,
+                 okane::strings::convert_to_str_with_style(okane::strings::convert_to_str(amount) + " " + okane::app_config().currency, current.type == okane::entry::EntryType::Abo ? rang::fgB::yellow : amount < 0 ? rang::fgB::red
+                                                                                                                                                                                                                      : rang::fgB::green)});
         }
 
         table_view.print();
