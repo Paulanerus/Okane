@@ -28,7 +28,7 @@ make config=release
 
 **Arch Linux:**
 
-- Soon
+- `yay -S okane`
 
 **Flatpak:**
 

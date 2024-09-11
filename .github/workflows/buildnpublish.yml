@@ -71,5 +71,5 @@ jobs:
 
       - name: Package files
         run: |
-          tar -czvf Source.tar.gz --exclude=.git --exclude=.github --exclude=.gitignore --exclude=.gitmodules ./src ./LICENSE.md ./premake5.lua ./README.md ./libs/rang/include/rang.hpp
+          tar -czvf Source.tar.gz --exclude=.git --exclude=.github --exclude=.gitignore --exclude=.gitmodules ./src ./include ./LICENSE.md ./premake5.lua ./README.md ./libs/rang/include/rang.hpp
           gh release upload $(date +'%Y.%-m.%-d') Source.tar.gz
