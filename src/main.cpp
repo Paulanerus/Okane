@@ -10,6 +10,7 @@
 #ifdef _WIN32
 #include "Windows.h"
 #endif
+
 int main(int argc, char **args)
 {
     rang::setControlMode(rang::control::Force);
