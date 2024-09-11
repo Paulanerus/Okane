@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../table/TableView.hpp"
+#include "table_view.hpp"
 #include "../Option.hpp"
 #include "strings.hpp"
 #include "config.hpp"
@@ -22,7 +22,7 @@ public:
 
         if (args.empty())
         {
-            TableView table_view;
+            okane::TableView table_view;
             table_view.add_row({"Start date", "Tag", "Amount", "Interval"});
 
             for (const auto &abo : abos)

@@ -2,7 +2,7 @@
 
 #include "rang.hpp"
 
-#include "../../table/TableView.hpp"
+#include "table_view.hpp"
 #include "../Option.hpp"
 #include "strings.hpp"
 #include "config.hpp"
@@ -67,7 +67,7 @@ public:
 
         auto balance = month_entry->get().balance();
 
-        TableView table_view;
+        okane::TableView table_view;
 
         table_view.add_row({"Category", "Amount"});
         table_view.add_row({"Income", okane::strings::convert_to_str_with_style(okane::strings::convert_to_str(month_entry->get().income()) + " " + okane::app_config().currency, rang::fgB::green)});

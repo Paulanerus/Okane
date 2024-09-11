@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../table/TableView.hpp"
+#include "table_view.hpp"
 #include "../Option.hpp"
 #include "strings.hpp"
 #include "config.hpp"
@@ -63,7 +63,7 @@ public:
             return;
         }
 
-        TableView table_view;
+        okane::TableView table_view;
         table_view.add_row({"Index", "Date", "Tag", "Amount"});
 
         for (std::size_t i{}; i < month_entry->get().entries.size(); i++)
