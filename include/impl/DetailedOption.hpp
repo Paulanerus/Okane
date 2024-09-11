@@ -1,8 +1,8 @@
 #pragma once
 
 #include "table_view.hpp"
-#include "../Option.hpp"
 #include "strings.hpp"
+#include "option.hpp"
 #include "config.hpp"
 #include "entry.hpp"
 #include "regex.hpp"
@@ -11,10 +11,14 @@
 #include <iostream>
 #include <cstdint>
 
-class DetailedOption : public Option
+class DetailedOption : public okane::Option
 {
-
 public:
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"detailed", "detail", "det", "d"};
+    }
+
     void execute(const std::vector<std::string> &args) override
     {
         std::string month = okane::time::to_string_fmt(okane::time::current_time(), "%m");

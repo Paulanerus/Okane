@@ -1,14 +1,21 @@
 #pragma once
 
-#include "../Option.hpp"
+#include "rang.hpp"
+
+#include "option.hpp"
 #include "config.hpp"
 
 #include <iostream>
 
-class CurrencyOption : public Option
+class CurrencyOption : public okane::Option
 {
 
 public:
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"currency", "c"};
+    }
+
     void execute(const std::vector<std::string> &args) override
     {
         if (args.empty())

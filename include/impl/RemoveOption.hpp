@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Option.hpp"
+#include "option.hpp"
 #include "config.hpp"
 #include "entry.hpp"
 #include "regex.hpp"
@@ -10,9 +10,14 @@
 #include <iostream>
 #include <cstdint>
 
-class RemoveOption : public Option
+class RemoveOption : public okane::Option
 {
 public:
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"remove", "rem", "r", "del", "delete"};
+    }
+
     void execute(const std::vector<std::string> &args) override
     {
         if (args.size() < 1)

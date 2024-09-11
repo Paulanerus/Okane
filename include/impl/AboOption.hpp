@@ -1,9 +1,9 @@
 #pragma once
 
 #include "table_view.hpp"
-#include "../Option.hpp"
 #include "strings.hpp"
 #include "config.hpp"
+#include "option.hpp"
 #include "entry.hpp"
 #include "regex.hpp"
 #include "time.hpp"
@@ -13,10 +13,15 @@
 #include <optional>
 #include <memory>
 
-class AboOption : public Option
+class AboOption : public okane::Option
 {
 public:
-    void execute(const std::vector<std::string> &args)
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"abo"};
+    }
+
+    void execute(const std::vector<std::string> &args) override
     {
         auto &abos = okane::app_config().abos;
 

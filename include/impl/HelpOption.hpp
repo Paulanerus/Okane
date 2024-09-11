@@ -1,14 +1,19 @@
 #pragma once
 
-#include "../Option.hpp"
+#include "option.hpp"
 #include "rang.hpp"
 
 #include <iostream>
 #include <map>
 
-class HelpOption : public Option
+class HelpOption : public okane::Option
 {
 public:
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"help", "h"};
+    }
+
     void execute([[maybe_unused]] const std::vector<std::string> &args) override
     {
         std::cout << ' ' << "Okane " << rang::fgB::blue << "<option> " << rang::style::reset << "<args>\n";

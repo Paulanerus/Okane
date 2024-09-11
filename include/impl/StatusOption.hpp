@@ -3,8 +3,8 @@
 #include "rang.hpp"
 
 #include "table_view.hpp"
-#include "../Option.hpp"
 #include "strings.hpp"
+#include "option.hpp"
 #include "config.hpp"
 #include "entry.hpp"
 #include "regex.hpp"
@@ -13,10 +13,15 @@
 #include <numeric>
 #include <iostream>
 
-class StatusOption : public Option
+class StatusOption : public okane::Option
 {
 
 public:
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"status", "stat", "s"};
+    }
+
     void execute(const std::vector<std::string> &args) override
     {
         std::string month = okane::time::to_string_fmt(okane::time::current_time(), "%m");

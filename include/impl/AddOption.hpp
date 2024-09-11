@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Option.hpp"
 #include "strings.hpp"
+#include "option.hpp"
 #include "config.hpp"
 #include "entry.hpp"
 #include "regex.hpp"
@@ -9,10 +9,15 @@
 
 #include <iostream>
 
-class AddOption : public Option
+class AddOption : public okane::Option
 {
 
 public:
+    const std::unordered_set<std::string> identifier() const noexcept
+    {
+        return std::unordered_set<std::string>{"add", "a"};
+    }
+
     void execute(const std::vector<std::string> &args) override
     {
         if (args.size() <= 1)

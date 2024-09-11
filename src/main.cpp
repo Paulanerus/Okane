@@ -1,7 +1,7 @@
 #include "rang.hpp"
 
-#include "option/Option.hpp"
 #include "strings.hpp"
+#include "option.hpp"
 #include "config.hpp"
 
 #include <iostream>
@@ -32,7 +32,7 @@ int main(int argc, char **args)
     okane::load_config();
 
     std::string firstArg{args[1]};
-    auto option = Option::find(okane::strings::convert_to_lowercase(firstArg));
+    auto option = okane::find_by_name(okane::strings::convert_to_lowercase(firstArg));
 
     if (!option)
     {
@@ -42,7 +42,7 @@ int main(int argc, char **args)
     }
 
     std::cout << std::endl;
-    option->execute(Option::copy_after(argc, args));
+    option->execute(okane::copy_after(argc, args));
     std::cout << std::endl;
 
     okane::save_config();
