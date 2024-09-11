@@ -7,8 +7,8 @@
 
 #include "rang.hpp"
 
-#include "utils/regex.hpp"
 #include "strings.hpp"
+#include "regex.hpp"
 
 #include <filesystem>
 #include <iostream>

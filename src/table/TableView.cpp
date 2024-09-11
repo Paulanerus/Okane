@@ -1,6 +1,6 @@
 #include "TableView.hpp"
 
-#include "../utils/regex.hpp"
+#include "regex.hpp"
 
 #include <iostream>
 #include <numeric>

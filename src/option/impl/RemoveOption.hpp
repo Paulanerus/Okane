@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../utils/regex.hpp"
-#include "../../utils/time.hpp"
 #include "../Option.hpp"
 #include "config.hpp"
 #include "entry.hpp"
+#include "regex.hpp"
+#include "time.hpp"
 
 #include <unordered_set>
 #include <iostream>
