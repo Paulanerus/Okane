@@ -21,6 +21,8 @@ int main(int argc, char **args)
     }
 
 #ifdef _WIN32
+    rang::setWinTermMode(rang::winTerm::Ansi);
+
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_CTYPE, "");
 #else
