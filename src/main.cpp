@@ -1,44 +1,51 @@
 #include "rang.hpp"
 
-#include "config/Config.hpp"
-#include "option/Option.hpp"
-#include "utils/StringUtils.hpp"
-#include "utils/Logger.hpp"
+#include "strings.hpp"
+#include "option.hpp"
+#include "config.hpp"
 
-#include <clocale>
 #include <iostream>
+#include <clocale>
 
 #ifdef _WIN32
 #include "Windows.h"
 #endif
 int main(int argc, char **args)
 {
+    rang::setControlMode(rang::control::Force);
+
     if (argc <= 1)
+    {
+        std::cout << "Try '" << rang::fgB::blue << "okane help" << rang::style::reset << "' for more information" << std::endl;
         return EXIT_SUCCESS;
+    }
 
 #ifdef _WIN32
+    rang::setWinTermMode(rang::winTerm::Ansi);
+
     SetConsoleOutputCP(CP_UTF8);
     setlocale(LC_CTYPE, "");
 #else
     setlocale(LC_CTYPE, "en_US.utf8");
 #endif
 
-    rang::setControlMode(rang::control::Force);
-
-    auto config = std::make_unique<Config>();
+    okane::load_config();
 
     std::string firstArg{args[1]};
-    auto option = Option::find(Okane::String::toLower(firstArg));
+    auto option = okane::find_by_name(okane::strings::convert_to_lowercase(firstArg));
 
     if (!option)
     {
-        Okane::Logging::printlnError("\nOption not found try 'okane help' for more informations\n");
+        std::cout << rang::fgB::red << "\nOption not found try 'okane help' for more information\n"
+                  << rang::style::reset << std::endl;
         return EXIT_SUCCESS;
     }
 
     std::cout << std::endl;
-    option->execute(Option::copyAfter(argc, args));
+    option->execute(okane::copy_after(argc, args));
     std::cout << std::endl;
+
+    okane::save_config();
 
     return EXIT_SUCCESS;
 }
