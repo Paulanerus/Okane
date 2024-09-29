@@ -2,24 +2,22 @@
 
 #include "rang.hpp"
 
-#include "option.hpp"
 #include "config.hpp"
+#include "option.hpp"
 
 #include <iostream>
 
-class CurrencyOption : public okane::Option
-{
+class CurrencyOption : public okane::Option {
 
 public:
     const std::unordered_set<std::string> identifier() const noexcept
     {
-        return std::unordered_set<std::string>{"currency", "c"};
+        return std::unordered_set<std::string> { "currency", "c" };
     }
 
-    void execute(const std::vector<std::string> &args) override
+    void execute(const std::vector<std::string>& args) override
     {
-        if (args.empty())
-        {
+        if (args.empty()) {
             std::cout << rang::fgB::red << "Please provide a currency symbol/text like €, $ or Yen." << rang::style::reset << std::endl;
             return;
         }

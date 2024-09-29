@@ -1,22 +1,21 @@
 #include "rang.hpp"
 
-#include "strings.hpp"
-#include "option.hpp"
 #include "config.hpp"
+#include "option.hpp"
+#include "strings.hpp"
 
-#include <iostream>
 #include <clocale>
+#include <iostream>
 
 #ifdef _WIN32
-#include "Windows.h"
+#    include "Windows.h"
 #endif
 
-int main(int argc, char **args)
+int main(int argc, char** args)
 {
     rang::setControlMode(rang::control::Force);
 
-    if (argc <= 1)
-    {
+    if (argc <= 1) {
         std::cout << "Try '" << rang::fgB::blue << "okane help" << rang::style::reset << "' for more information" << std::endl;
         return EXIT_SUCCESS;
     }
@@ -32,11 +31,10 @@ int main(int argc, char **args)
 
     okane::load_config();
 
-    std::string firstArg{args[1]};
+    std::string firstArg { args[1] };
     auto option = okane::find_by_name(okane::strings::convert_to_lowercase(firstArg));
 
-    if (!option)
-    {
+    if (!option) {
         std::cout << rang::fgB::red << "\nOption not found try 'okane help' for more information\n"
                   << rang::style::reset << std::endl;
         return EXIT_SUCCESS;

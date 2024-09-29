@@ -1,0 +1,22 @@
+# Modified Ladybird .clang-format
+# https://github.com/LadybirdBrowser/ladybird
+
+AlignEscapedNewlines: Left
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+BasedOnStyle: WebKit
+BraceWrapping:
+  AfterFunction: true
+BreakBeforeBraces: Custom
+BreakBeforeInheritanceComma: true
+BreakConstructorInitializers: BeforeComma
+IndentPPDirectives: AfterHash
+IndentRequiresClause: false
+InsertNewlineAtEOF: true
+LineEnding: LF
+QualifierAlignment: Left
+RemoveSemicolon: true
+RequiresClausePosition: WithFollowing
+RequiresExpressionIndentation: OuterScope
+SpaceAfterTemplateKeyword: false
